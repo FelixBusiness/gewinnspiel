@@ -1,15 +1,15 @@
 /* Service Worker: legt alle Dateien beim ersten Aufruf ab, danach läuft die App komplett ohne Internet. */
-const VERSION = "mppm-gewinnspiel-v1";   // bei Änderungen an den Dateien hochzählen, dann aktualisiert sich das iPad beim nächsten Online-Start
+const VERSION = "mppm-gewinnspiel-v2";   // bei Änderungen an den Dateien hochzählen, dann aktualisiert sich das iPad beim nächsten Online-Start
 const FILES = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
-  "./vendor/xlsx.mini.min.js",
-  "./fonts/inter-latin-wght-normal.woff2",
-  "./fonts/inter-latin-ext-wght-normal.woff2",
-  "./icons/apple-touch-icon.png",
-  "./icons/icon-192.png",
-  "./icons/icon-512.png"
+  "./xlsx.mini.min.js",
+  "./inter-latin-wght-normal.woff2",
+  "./inter-latin-ext-wght-normal.woff2",
+  "./apple-touch-icon.png",
+  "./icon-192.png",
+  "./icon-512.png"
 ];
 const OPTIONAL = ["./logo.svg"]; // eigenes Logo, falls vorhanden
 
