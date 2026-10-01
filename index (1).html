@@ -1,0 +1,733 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MPPM Gewinnspiel">
+<meta name="format-detection" content="telephone=no">
+<meta name="theme-color" content="#2c355d">
+<title>MPPM Gewinnspiel</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icon-192.png">
+<style>
+@font-face{font-family:"Inter";font-style:normal;font-display:swap;font-weight:100 900;src:url(inter-latin-wght-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Inter";font-style:normal;font-display:swap;font-weight:100 900;src:url(inter-latin-ext-wght-normal.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+
+:root{
+  --blue:#1200dd; --blue-hover:#0e00b1; --blue-soft:#8980ee; --blue-tint:#eceafd;
+  --navy:#2c355d; --navy-deep:#1d2444; --ink:#2c355d; --muted:#666e90;
+  --line:#d6d9e6; --field:#f5f6fa; --bg:#ffffff; --error:#c4262e; --ok:#1a7f4b;
+  --radius:12px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--navy-deep)}
+body{font-family:"Inter",system-ui,-apple-system,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased;
+  touch-action:manipulation;-webkit-user-select:none;user-select:none;overscroll-behavior:none;font-feature-settings:"tnum" 1,"cv11" 1}
+input,label,button{font:inherit;color:inherit}
+input{-webkit-user-select:text;user-select:text}
+
+.app{display:grid;grid-template-columns:minmax(0,46fr) minmax(0,54fr);height:100vh;height:100dvh}
+
+/* ---------- linke Seite: Spiel ---------- */
+.stage{position:relative;overflow:hidden;color:#fff;background:var(--navy);
+  padding:calc(env(safe-area-inset-top) + 36px) 44px 32px calc(env(safe-area-inset-left) + 44px);
+  display:flex;flex-direction:column;gap:26px}
+.stage::before{content:"";position:absolute;inset:auto -30% -45% -30%;height:85%;
+  background:radial-gradient(closest-side,rgba(18,0,221,.55),rgba(18,0,221,0));pointer-events:none}
+.stage::after{content:"";position:absolute;left:0;right:0;bottom:0;height:5px;background:var(--blue)}
+.stage > *{position:relative}
+.brand{display:inline-flex;align-self:flex-start;align-items:center;background:#fff;border-radius:12px;padding:13px 20px;cursor:default;box-shadow:0 8px 24px rgba(8,10,40,.25)}
+.brand img{height:30px;width:auto;display:block}
+.brand .wordmark{color:var(--navy)}
+.wordmark[hidden]{display:none}
+.wordmark{display:flex;flex-direction:column;line-height:1}
+.wordmark b{font-size:26px;font-weight:800;letter-spacing:.06em}
+.wordmark span{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;opacity:.72;margin-top:6px}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#c9c4ff}
+.eyebrow::before{content:"";width:28px;height:2px;background:#c9c4ff}
+h1{font-size:clamp(34px,4.1vw,50px);line-height:1.05;letter-spacing:-.025em;font-weight:750;margin:12px 0 14px}
+.lead{font-size:17px;line-height:1.5;color:rgba(255,255,255,.82);margin:0;max-width:30em}
+.lead strong{color:#fff;font-weight:600}
+
+.tip{background:#fff;color:var(--ink);border-radius:16px;padding:18px 22px 16px;box-shadow:0 18px 40px rgba(8,10,40,.35)}
+.tip label{display:block;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.tip-row{display:flex;align-items:baseline;gap:12px;margin-top:6px;border-bottom:2px solid var(--line);transition:border-color .15s}
+.tip-row:focus-within{border-color:var(--blue)}
+.tip input{flex:1;min-width:0;border:0;outline:0;background:transparent;font-size:clamp(36px,4.2vw,48px);font-weight:700;letter-spacing:-.02em;padding:4px 0 8px;color:var(--navy-deep)}
+.tip input::placeholder{color:#c3c7d8;font-weight:600}
+.tip .unit{font-size:18px;font-weight:600;color:var(--muted)}
+.tip .hint{font-size:13.5px;color:var(--muted);margin-top:10px;line-height:1.4}
+.tip.invalid .tip-row{border-color:var(--error)}
+
+.prize{display:flex;align-items:center;gap:22px;margin-top:auto;padding-top:6px}
+.prize svg{flex:none;width:118px;height:auto}
+.prize small{display:block;font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#c9c4ff}
+.prize strong{display:block;font-size:clamp(28px,3.1vw,36px);font-weight:750;letter-spacing:-.02em;margin-top:6px}
+.prize p{margin:6px 0 0;font-size:14px;color:rgba(255,255,255,.7)}
+
+/* ---------- rechte Seite: Formular ---------- */
+.form{background:var(--bg);overflow-y:auto;-webkit-overflow-scrolling:touch;
+  padding:calc(env(safe-area-inset-top) + 40px) calc(env(safe-area-inset-right) + 48px) 28px 48px;display:flex;flex-direction:column}
+.form h2{font-size:26px;font-weight:700;letter-spacing:-.015em;margin:0 0 4px}
+.form .sub{margin:0 0 22px;color:var(--muted);font-size:15.5px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 18px}
+.field label{display:block;font-size:14px;font-weight:600;margin:0 0 7px}
+.field label em{font-style:normal;font-weight:500;color:var(--muted)}
+.field input{width:100%;height:54px;border:1.5px solid var(--line);border-radius:var(--radius);background:var(--field);
+  padding:0 16px;font-size:17px;outline:0;transition:border-color .15s,background .15s,box-shadow .15s;-webkit-appearance:none;appearance:none}
+.field input:focus{border-color:var(--blue);background:#fff;box-shadow:0 0 0 4px rgba(18,0,221,.10)}
+.field.invalid input{border-color:var(--error);background:#fff}
+.err{display:none;color:var(--error);font-size:13px;font-weight:500;margin-top:6px}
+.invalid > .err, .tip.invalid .err{display:block}
+
+.consents{margin-top:22px;display:flex;flex-direction:column;gap:12px}
+.check{display:grid;grid-template-columns:30px 1fr;gap:14px;align-items:start;padding:14px 16px;border:1.5px solid var(--line);border-radius:var(--radius);cursor:pointer;transition:border-color .15s,background .15s}
+.check input{position:absolute;opacity:0;pointer-events:none}
+.box{width:30px;height:30px;border-radius:8px;border:2px solid #aab0c8;background:#fff;display:grid;place-items:center;transition:all .15s;margin-top:1px}
+.box svg{width:18px;height:18px;opacity:0;transform:scale(.6);transition:all .15s}
+.check input:checked + .box{background:var(--blue);border-color:var(--blue)}
+.check input:checked + .box svg{opacity:1;transform:none}
+.check:has(input:checked){border-color:var(--blue-soft);background:var(--blue-tint)}
+.check.invalid{border-color:var(--error)}
+.check-text{font-size:14px;line-height:1.5;color:#3d4568}
+.check-text b{color:var(--ink);font-weight:650}
+.tag{display:inline-block;font-size:11.5px;font-weight:650;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:99px;margin-left:6px;vertical-align:1px}
+.tag.req{background:#fde8e9;color:var(--error)}
+.tag.opt{background:#e9ecf5;color:var(--muted)}
+.linkish{color:var(--blue);font-weight:600;text-decoration:underline;text-underline-offset:2px;background:none;border:0;padding:0;cursor:pointer}
+
+.submit{margin-top:22px;height:62px;width:100%;border:0;border-radius:var(--radius);background:var(--blue);color:#fff;font-size:19px;font-weight:650;letter-spacing:.005em;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:10px;transition:background .15s,transform .08s}
+.submit:active{background:var(--blue-hover);transform:scale(.99)}
+.submit svg{width:22px;height:22px}
+.foot{margin-top:auto;padding-top:20px;font-size:12px;color:#8a91ad;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,140%);background:var(--navy-deep);color:#fff;padding:14px 22px;border-radius:12px;font-size:15px;font-weight:500;
+  box-shadow:0 12px 30px rgba(0,0,0,.3);transition:transform .25s,opacity .25s;z-index:60;max-width:90vw;text-align:center;opacity:0;pointer-events:none}
+.toast.show{transform:translate(-50%,0);opacity:1}
+
+/* ---------- Überlagerungen ---------- */
+.overlay{position:fixed;inset:0;display:none;z-index:50}
+.overlay.open{display:flex}
+.thanks{background:var(--navy);color:#fff;align-items:center;justify-content:center;text-align:center;flex-direction:column;padding:40px}
+.thanks::after{content:"";position:absolute;left:0;right:0;bottom:0;height:5px;background:var(--blue)}
+.thanks .seal{width:96px;height:96px;border-radius:50%;background:var(--blue);display:grid;place-items:center;margin-bottom:28px;box-shadow:0 0 0 14px rgba(18,0,221,.25)}
+.thanks .seal svg{width:46px;height:46px}
+.thanks h2{font-size:44px;letter-spacing:-.02em;margin:0 0 12px;font-weight:750}
+.thanks p{font-size:19px;line-height:1.5;color:rgba(255,255,255,.82);margin:0;max-width:34em}
+.thanks .yourtip{margin:28px 0 8px;font-size:15px;letter-spacing:.14em;text-transform:uppercase;color:#c9c4ff;font-weight:600}
+.thanks .tipval{font-size:56px;font-weight:750;letter-spacing:-.02em}
+.thanks .again{margin-top:40px;font-size:15px;color:rgba(255,255,255,.6)}
+
+.modal{background:rgba(16,20,45,.55);align-items:center;justify-content:center;padding:28px}
+.sheet{background:#fff;border-radius:18px;width:min(860px,100%);max-height:100%;display:flex;flex-direction:column;box-shadow:0 30px 70px rgba(0,0,0,.35)}
+.sheet header{display:flex;align-items:center;justify-content:space-between;padding:20px 26px;border-bottom:1px solid var(--line)}
+.sheet header h3{margin:0;font-size:21px;font-weight:700}
+.sheet .body{padding:22px 26px;overflow-y:auto;-webkit-overflow-scrolling:touch;-webkit-user-select:text;user-select:text}
+.sheet .body h4{margin:18px 0 6px;font-size:15px}
+.sheet .body p,.sheet .body li{font-size:14.5px;line-height:1.55;color:#3d4568;margin:0 0 8px}
+.sheet .body ol{padding-left:20px;margin:0}
+.x{width:44px;height:44px;border-radius:50%;border:0;background:var(--field);font-size:24px;line-height:1;cursor:pointer}
+.small{width:min(420px,100%)}
+
+.pin{display:flex;gap:12px;justify-content:center;margin:8px 0 6px}
+.pin input{width:100%;height:60px;text-align:center;font-size:28px;letter-spacing:.5em;border:1.5px solid var(--line);border-radius:12px;background:var(--field);outline:0}
+.pin input:focus{border-color:var(--blue);background:#fff}
+
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+.stat{background:var(--field);border-radius:12px;padding:14px 16px}
+.stat small{display:block;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.stat b{display:block;font-size:26px;font-weight:700;margin-top:4px}
+.stat span{font-size:14px;font-weight:600}
+.btns{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px}
+.btn{height:48px;padding:0 18px;border-radius:10px;border:1.5px solid var(--line);background:#fff;font-weight:600;font-size:15px;cursor:pointer}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+.btn.danger{color:var(--error);border-color:#f0c4c6}
+.btn:active{transform:scale(.98)}
+.inline{display:flex;gap:10px;align-items:center;margin:6px 0 12px}
+.inline input{height:48px;border:1.5px solid var(--line);border-radius:10px;padding:0 14px;font-size:16px;background:var(--field);outline:0;width:220px}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{text-align:left;padding:9px 8px;border-bottom:1px solid #eceef5;white-space:nowrap}
+th{font-size:12px;font-weight:650;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);position:sticky;top:0;background:#fff}
+td.num,th.num{text-align:right}
+.tablewrap{max-height:300px;overflow:auto;border:1px solid var(--line);border-radius:10px}
+.muted{color:var(--muted);font-size:13.5px}
+
+/* ---------- Hochformat ---------- */
+@media (max-width: 900px), (orientation: portrait){
+  .app{grid-template-columns:1fr;height:auto;min-height:100vh}
+  .stage{padding:calc(env(safe-area-inset-top) + 30px) 36px 34px;gap:22px}
+  .prize{margin-top:4px}
+  .form{overflow:visible;padding:34px 36px 28px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- Spielbereich -->
+  <section class="stage">
+    <div class="brand" id="brand" aria-label="MPPM">
+      <img id="logo" src="logo.png" alt="MPPM" onerror="this.remove();document.getElementById('wordmark').hidden=false">
+      <div class="wordmark" id="wordmark" hidden><b>MPPM</b><span>Manfred Piontke Vermögensverwaltung</span></div>
+    </div>
+
+    <div>
+      <div class="eyebrow">Gewinnspiel</div>
+      <h1>DAX-Endstand<br>Oktober</h1>
+      <p class="lead">Wo schließt der DAX am <strong id="closeDateText">Freitag, 30. Oktober 2026</strong>? Wer mit seinem Tipp am nächsten am offiziellen Schlusskurs liegt, gewinnt.</p>
+    </div>
+
+    <div class="tip" id="tipBox">
+      <label for="tip">Ihr Tipp</label>
+      <div class="tip-row">
+        <input id="tip" inputmode="decimal" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="z. B. 24.350" maxlength="12">
+        <span class="unit">Punkte</span>
+      </div>
+      <div class="err" id="tipErr">Bitte geben Sie einen gültigen Indexstand ein.</div>
+      <div class="hint">Bis zu zwei Nachkommastellen. Pro Person ist ein Tipp möglich.</div>
+    </div>
+
+    <div class="prize">
+      <!-- Tablet-Illustration -->
+      <svg viewBox="0 0 120 92" fill="none" aria-hidden="true">
+        <rect x="6" y="4" width="108" height="80" rx="9" stroke="#fff" stroke-width="2.4"/>
+        <rect x="13" y="11" width="94" height="66" rx="3" fill="#1200dd"/>
+        <path d="M13 58 C 32 52, 44 66, 62 52 S 92 34, 107 40 L107 77 L13 77 Z" fill="#fff" fill-opacity=".14"/>
+        <path d="M13 64 C 34 58, 48 70, 66 60 S 94 46, 107 50" stroke="#fff" stroke-opacity=".5" stroke-width="1.6"/>
+        <circle cx="60" cy="7.5" r="1.3" fill="#fff"/>
+        <rect x="40" y="86" width="40" height="3" rx="1.5" fill="#fff" fill-opacity=".35"/>
+      </svg>
+      <div>
+        <small>Zu gewinnen</small>
+        <strong>ein iPad Air</strong>
+        <p>Der Gewinner wird nach Börsenschluss per E-Mail benachrichtigt.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Formular -->
+  <section class="form">
+    <form id="entryForm" novalidate autocomplete="off">
+      <h2>Ihre Kontaktdaten</h2>
+      <p class="sub">Damit wir Sie im Gewinnfall erreichen können.</p>
+
+      <div class="grid">
+        <div class="field" id="f-first">
+          <label for="first">Vorname</label>
+          <input id="first" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" maxlength="60">
+          <div class="err">Bitte Vornamen angeben.</div>
+        </div>
+        <div class="field" id="f-last">
+          <label for="last">Nachname</label>
+          <input id="last" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" maxlength="60">
+          <div class="err">Bitte Nachnamen angeben.</div>
+        </div>
+        <div class="field" id="f-email">
+          <label for="email">E-Mail-Adresse</label>
+          <input id="email" type="email" inputmode="email" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" maxlength="120">
+          <div class="err" id="emailErr">Bitte eine gültige E-Mail-Adresse angeben.</div>
+        </div>
+        <div class="field" id="f-phone">
+          <label for="phone">Telefonnummer <em id="phoneOpt">(optional)</em></label>
+          <input id="phone" type="tel" inputmode="tel" autocomplete="off" autocorrect="off" spellcheck="false" maxlength="30">
+          <div class="err">Bitte eine gültige Telefonnummer angeben.</div>
+        </div>
+      </div>
+
+      <div class="consents">
+        <label class="check" id="c-data">
+          <input type="checkbox" id="consentData">
+          <span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+          <span class="check-text"><b>Datenverarbeitung</b><span class="tag req">Pflicht</span><br><span id="consentDataText"></span></span>
+        </label>
+        <label class="check" id="c-contact">
+          <input type="checkbox" id="consentContact">
+          <span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+          <span class="check-text"><b>Kontaktaufnahme</b><span class="tag opt">freiwillig</span><br><span id="consentContactText"></span></span>
+        </label>
+      </div>
+
+      <button class="submit" type="submit">
+        Jetzt teilnehmen
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+    </form>
+    <div class="foot">
+      <span>MPPM GmbH · Gimbacher Straße 13 · 65817 Eppstein</span>
+      <button class="linkish" type="button" id="openTerms">Teilnahmebedingungen &amp; Datenschutz</button>
+    </div>
+  </section>
+</div>
+
+<!-- Danke-Bildschirm -->
+<div class="overlay thanks" id="thanks">
+  <div class="seal"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+  <h2 id="thanksTitle">Vielen Dank!</h2>
+  <p>Ihre Teilnahme ist gespeichert. Wir drücken Ihnen die Daumen und melden uns im Gewinnfall nach dem 30. Oktober 2026 per E-Mail.</p>
+  <div class="yourtip">Ihr Tipp</div>
+  <div class="tipval" id="thanksTip"></div>
+  <div class="again" id="thanksAgain"></div>
+</div>
+
+<!-- Teilnahmebedingungen -->
+<div class="overlay modal" id="terms">
+  <div class="sheet">
+    <header><h3>Teilnahmebedingungen &amp; Datenschutz</h3><button class="x" data-close>&times;</button></header>
+    <div class="body" id="termsBody"></div>
+  </div>
+</div>
+
+<!-- PIN -->
+<div class="overlay modal" id="pinModal">
+  <div class="sheet small">
+    <header><h3>Verwaltung</h3><button class="x" data-close>&times;</button></header>
+    <div class="body">
+      <p class="muted">Bitte die Verwaltungs-PIN eingeben.</p>
+      <div class="pin"><input id="pinInput" type="password" inputmode="numeric" maxlength="8" autocomplete="off"></div>
+      <div class="err" id="pinErr" style="text-align:center">Falsche PIN.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Verwaltung -->
+<div class="overlay modal" id="admin">
+  <div class="sheet">
+    <header><h3>Verwaltung · Gewinnspiel</h3><button class="x" data-close>&times;</button></header>
+    <div class="body">
+      <div class="stats">
+        <div class="stat"><small>Teilnahmen</small><b id="sCount">0</b></div>
+        <div class="stat"><small>Kontakt erlaubt</small><b id="sContact">0</b></div>
+        <div class="stat"><small>Letzter Export</small><span id="sExport">noch nie</span></div>
+      </div>
+      <div class="btns">
+        <button class="btn primary" id="btnExport">Als Excel exportieren</button>
+        <button class="btn" id="btnPersist">Speicherstatus prüfen</button>
+        <button class="btn danger" id="btnClear">Alle Einträge löschen</button>
+      </div>
+      <p class="muted" id="persistInfo"></p>
+
+      <h4>Gewinner ermitteln</h4>
+      <div class="inline">
+        <input id="officialClose" inputmode="decimal" placeholder="Offizieller Schlusskurs" autocomplete="off">
+        <button class="btn" id="btnWinner">Rangliste berechnen</button>
+      </div>
+      <div id="winnerOut"></div>
+
+      <h4>Alle Einträge</h4>
+      <div class="tablewrap"><table id="entryTable"></table></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="xlsx.mini.min.js"></script>
+<script>
+"use strict";
+/* =========================================================
+   EINSTELLUNGEN – hier anpassen
+   ========================================================= */
+const CONFIG = {
+  adminPin: "4711",                         // PIN für den Verwaltungsbereich – bitte ändern!
+  contactEmail: "test@mppm.com",            // Adresse für Widerruf
+  company: "MPPM GmbH",
+  closeDateText: "Freitag, 30. Oktober 2026",
+  closeDateShort: "30. Oktober 2026",
+  phoneRequired: false,                     // true = Telefonnummer ist Pflichtfeld
+  tipMin: 1000, tipMax: 100000,             // Plausibilitätsgrenzen für den Tipp
+  idleResetSeconds: 90,                     // Formular leert sich nach so vielen Sekunden ohne Eingabe
+  thanksSeconds: 8,                         // Dauer des Danke-Bildschirms
+  textVersion: "2026-10-v1",                // bei Änderung der Einwilligungstexte hochzählen
+  storageKey: "mppm_gewinnspiel_dax_2026_10"
+};
+
+const TEXTS = {
+  consentData:
+    `Ich willige ein, dass die ${CONFIG.company} meine hier angegebenen personenbezogenen Daten (Name, E-Mail-Adresse, Telefonnummer und Tipp) zur Durchführung des Gewinnspiels und zur Benachrichtigung im Gewinnfall speichert und verarbeitet. ` +
+    `Diese Einwilligung kann ich jederzeit mit Wirkung für die Zukunft per E-Mail an ${CONFIG.contactEmail} widerrufen.`,
+  consentContact:
+    `Ich bin damit einverstanden, dass die ${CONFIG.company} mich per E-Mail und Telefon zu ihren Leistungen der Vermögensverwaltung kontaktiert. ` +
+    `Diese Einwilligung ist freiwillig und keine Voraussetzung für die Teilnahme. Ich kann sie jederzeit per E-Mail an ${CONFIG.contactEmail} widerrufen.`
+};
+
+const TERMS_HTML = `
+  <p><b>Entwurf – vor dem Einsatz bitte rechtlich prüfen lassen.</b></p>
+  <h4>Veranstalter</h4>
+  <p>${CONFIG.company}, Gimbacher Straße 13, 65817 Eppstein.</p>
+  <h4>Teilnahme</h4>
+  <ol>
+    <li>Teilnahmeberechtigt sind volljährige Personen mit Wohnsitz in Deutschland. Mitarbeiterinnen und Mitarbeiter der ${CONFIG.company} sowie deren Angehörige sind ausgeschlossen.</li>
+    <li>Jede Person darf nur einmal teilnehmen. Mehrfachteilnahmen werden nicht berücksichtigt.</li>
+    <li>Die Teilnahme ist kostenlos und unabhängig von einem Vertragsabschluss oder der Einwilligung in eine Kontaktaufnahme.</li>
+  </ol>
+  <h4>Gewinnermittlung</h4>
+  <ol>
+    <li>Maßgeblich ist der offizielle Schlusskurs des DAX im Xetra-Handel am ${CONFIG.closeDateShort}.</li>
+    <li>Es gewinnt der Tipp mit der geringsten Abweichung vom Schlusskurs. Liegen mehrere Tipps gleich nah, gewinnt der zeitlich früher abgegebene Tipp.</li>
+    <li>Der Gewinn ist ein iPad Air. Eine Barauszahlung ist ausgeschlossen. Der Rechtsweg ist ausgeschlossen.</li>
+    <li>Der Gewinner wird per E-Mail benachrichtigt. Meldet er sich nicht innerhalb von 14 Tagen, wird ein Ersatzgewinner nach demselben Verfahren ermittelt.</li>
+  </ol>
+  <h4>Datenschutz</h4>
+  <p>Ihre Daten werden ausschließlich lokal auf diesem Gerät gespeichert, anschließend von der ${CONFIG.company} zur Durchführung des Gewinnspiels verarbeitet und spätestens drei Monate nach Ende des Gewinnspiels gelöscht – es sei denn, Sie haben der Kontaktaufnahme zugestimmt. Ihre Einwilligungen können Sie jederzeit per E-Mail an ${CONFIG.contactEmail} widerrufen. Weitere Informationen finden Sie in unserer Datenschutzerklärung unter www.mppm.com/de/datenschutz.</p>
+`;
+
+/* =========================================================
+   Hilfsfunktionen
+   ========================================================= */
+const $ = id => document.getElementById(id);
+const nf = new Intl.NumberFormat("de-DE", {minimumFractionDigits: 2, maximumFractionDigits: 2});
+
+function parseNumber(raw){
+  let s = String(raw || "").trim().replace(/[\s'’]/g, "");
+  if (!s) return null;
+  if (s.includes(",")) s = s.replace(/\./g, "").replace(",", ".");
+  else if (/^\d{1,3}(\.\d{3})+$/.test(s)) s = s.replace(/\./g, "");
+  if (!/^\d+(\.\d{1,2})?$/.test(s)) return NaN;
+  return Math.round(parseFloat(s) * 100) / 100;
+}
+const emailOk = s => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(s);
+const phoneOk = s => /^[+()\d\s\/-]{6,30}$/.test(s) && (s.match(/\d/g) || []).length >= 6;
+const pad = n => String(n).padStart(2, "0");
+function localStamp(d){ return `${pad(d.getDate())}.${pad(d.getMonth()+1)}.${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`; }
+function esc(s){ return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function toast(msg, ms = 2600){ const t = $("toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove("show"), ms); }
+
+/* =========================================================
+   Datenspeicher: localStorage + Sicherungskopie in IndexedDB
+   ========================================================= */
+const Store = {
+  entries: [],
+  db: null,
+  async openDb(){
+    if (!("indexedDB" in window)) return null;
+    return new Promise(res => {
+      try {
+        const r = indexedDB.open("mppm-gewinnspiel", 1);
+        r.onupgradeneeded = () => r.result.createObjectStore("kv");
+        r.onsuccess = () => res(r.result);
+        r.onerror = () => res(null);
+      } catch(e){ res(null); }
+    });
+  },
+  idbGet(key){
+    return new Promise(res => {
+      if (!this.db) return res(null);
+      try { const q = this.db.transaction("kv").objectStore("kv").get(key); q.onsuccess = () => res(q.result || null); q.onerror = () => res(null); }
+      catch(e){ res(null); }
+    });
+  },
+  idbSet(key, val){
+    return new Promise(res => {
+      if (!this.db) return res(false);
+      try { const tx = this.db.transaction("kv", "readwrite"); tx.objectStore("kv").put(val, key); tx.oncomplete = () => res(true); tx.onerror = () => res(false); }
+      catch(e){ res(false); }
+    });
+  },
+  lsGet(key){ try { return JSON.parse(localStorage.getItem(key) || "null"); } catch(e){ return null; } },
+  lsSet(key, val){ try { localStorage.setItem(key, JSON.stringify(val)); return true; } catch(e){ return false; } },
+
+  async init(){
+    this.db = await this.openDb();
+    const a = this.lsGet(CONFIG.storageKey) || [];
+    const b = (await this.idbGet(CONFIG.storageKey)) || [];
+    const map = new Map();
+    [...a, ...b].forEach(e => { if (e && e.id) map.set(e.id, e); });
+    this.entries = [...map.values()].sort((x, y) => x.ts.localeCompare(y.ts));
+    if (this.entries.length) await this.persist();
+    try { if (navigator.storage && navigator.storage.persist) await navigator.storage.persist(); } catch(e){}
+  },
+  async persist(){
+    const okLs = this.lsSet(CONFIG.storageKey, this.entries);
+    const okDb = await this.idbSet(CONFIG.storageKey, this.entries);
+    return okLs || okDb;
+  },
+  async add(entry){
+    this.entries.push(entry);
+    const ok = await this.persist();
+    if (!ok){ this.entries.pop(); return false; }
+    // Kontrolle: wirklich gespeichert?
+    const back = this.lsGet(CONFIG.storageKey) || (await this.idbGet(CONFIG.storageKey)) || [];
+    return back.some(e => e.id === entry.id);
+  },
+  async clear(){ this.entries = []; await this.persist(); },
+  meta(key, val){
+    const k = CONFIG.storageKey + "_meta";
+    const m = this.lsGet(k) || {};
+    if (val === undefined) return m[key];
+    m[key] = val; this.lsSet(k, m);
+  }
+};
+
+/* =========================================================
+   Formular
+   ========================================================= */
+const form = $("entryForm");
+const fields = ["tip", "first", "last", "email", "phone"];
+
+function setInvalid(id, bad){
+  const wrap = id === "tip" ? $("tipBox") : (id.startsWith("c-") ? $(id) : $("f-" + id));
+  wrap.classList.toggle("invalid", !!bad);
+}
+
+function validate(){
+  let firstBad = null;
+  const mark = (id, bad, focusEl) => { setInvalid(id, bad); if (bad && !firstBad) firstBad = focusEl || $(id); };
+
+  const tip = parseNumber($("tip").value);
+  let tipBad = tip === null || isNaN(tip) || tip < CONFIG.tipMin || tip > CONFIG.tipMax;
+  $("tipErr").textContent = (tip !== null && !isNaN(tip) && (tip < CONFIG.tipMin || tip > CONFIG.tipMax))
+    ? "Dieser Wert wirkt unrealistisch – bitte prüfen."
+    : "Bitte geben Sie einen gültigen Indexstand ein.";
+  mark("tip", tipBad);
+
+  mark("first", $("first").value.trim().length < 1);
+  mark("last", $("last").value.trim().length < 1);
+
+  const email = $("email").value.trim().toLowerCase();
+  let emailBad = !emailOk(email);
+  $("emailErr").textContent = "Bitte eine gültige E-Mail-Adresse angeben.";
+  if (!emailBad && Store.entries.some(e => e.email === email)){
+    emailBad = true;
+    $("emailErr").textContent = "Mit dieser E-Mail-Adresse wurde bereits teilgenommen.";
+  }
+  mark("email", emailBad);
+
+  const phone = $("phone").value.trim();
+  mark("phone", CONFIG.phoneRequired ? !phoneOk(phone) : (phone !== "" && !phoneOk(phone)));
+
+  mark("c-data", !$("consentData").checked, $("consentData"));
+
+  return { ok: !firstBad, firstBad, tip, email, phone };
+}
+
+function resetForm(){
+  form.reset();
+  $("tip").value = "";
+  ["tip","first","last","email","phone","c-data"].forEach(id => setInvalid(id, false));
+  document.activeElement && document.activeElement.blur && document.activeElement.blur();
+  document.querySelector(".form").scrollTop = 0;
+  window.scrollTo(0, 0);
+}
+
+form.addEventListener("submit", async ev => {
+  ev.preventDefault();
+  const v = validate();
+  if (!v.ok){
+    toast("Bitte die markierten Angaben prüfen.");
+    if (v.firstBad && v.firstBad.type !== "checkbox") v.firstBad.focus();
+    return;
+  }
+  const now = new Date();
+  const entry = {
+    id: now.getTime().toString(36) + "-" + Math.random().toString(36).slice(2, 8),
+    ts: now.toISOString(),
+    tsLocal: localStamp(now),
+    tip: v.tip,
+    first: $("first").value.trim(),
+    last: $("last").value.trim(),
+    email: v.email,
+    phone: v.phone,
+    consentData: true,
+    consentContact: $("consentContact").checked,
+    textVersion: CONFIG.textVersion
+  };
+  const saved = await Store.add(entry);
+  if (!saved){
+    toast("Speichern fehlgeschlagen – bitte das Personal am Stand ansprechen.", 6000);
+    return;
+  }
+  showThanks(entry);
+});
+
+// Tipp beim Verlassen schön formatieren
+$("tip").addEventListener("blur", () => {
+  const n = parseNumber($("tip").value);
+  if (n !== null && !isNaN(n)) $("tip").value = nf.format(n);
+});
+// Fehlermarkierung beim Tippen entfernen
+fields.forEach(id => $(id).addEventListener("input", () => setInvalid(id, false)));
+$("consentData").addEventListener("change", () => setInvalid("c-data", false));
+
+/* ---------- Danke-Bildschirm ---------- */
+let thanksTimer = null;
+function showThanks(entry){
+  $("toast").classList.remove("show");
+  $("thanksTitle").textContent = `Vielen Dank, ${entry.first}!`;
+  $("thanksTip").textContent = nf.format(entry.tip) + " Punkte";
+  $("thanks").classList.add("open");
+  resetForm();
+  let left = CONFIG.thanksSeconds;
+  const tick = () => {
+    $("thanksAgain").textContent = `Antippen für die nächste Teilnahme · automatisch in ${left} s`;
+    if (left-- <= 0) closeThanks();
+  };
+  clearInterval(thanksTimer); tick(); thanksTimer = setInterval(tick, 1000);
+}
+function closeThanks(){ clearInterval(thanksTimer); $("thanks").classList.remove("open"); }
+$("thanks").addEventListener("click", closeThanks);
+
+/* ---------- Leerlauf: Formular nach Inaktivität leeren ---------- */
+let lastActivity = Date.now();
+["touchstart","keydown","input","mousedown"].forEach(t => document.addEventListener(t, () => lastActivity = Date.now(), {passive: true}));
+setInterval(() => {
+  if (document.querySelector(".overlay.open")) return;
+  const dirty = fields.some(id => $(id).value.trim() !== "") || $("consentData").checked || $("consentContact").checked;
+  if (dirty && Date.now() - lastActivity > CONFIG.idleResetSeconds * 1000) resetForm();
+}, 5000);
+
+/* =========================================================
+   Überlagerungen
+   ========================================================= */
+function openOverlay(id){ $(id).classList.add("open"); }
+function closeOverlay(id){ $(id).classList.remove("open"); }
+document.querySelectorAll("[data-close]").forEach(b => b.addEventListener("click", () => closeOverlay(b.closest(".overlay").id)));
+document.querySelectorAll(".modal").forEach(m => m.addEventListener("click", e => { if (e.target === m) closeOverlay(m.id); }));
+$("openTerms").addEventListener("click", () => openOverlay("terms"));
+
+/* ---------- Verwaltung: 5× schnell auf das Logo tippen ---------- */
+let taps = [];
+$("brand").addEventListener("click", () => {
+  const t = Date.now(); taps = taps.filter(x => t - x < 2500); taps.push(t);
+  if (taps.length >= 5){ taps = []; $("pinInput").value = ""; $("pinErr").style.display = "none"; openOverlay("pinModal"); setTimeout(() => $("pinInput").focus(), 50); }
+});
+$("pinInput").addEventListener("input", () => {
+  const v = $("pinInput").value;
+  if (v === CONFIG.adminPin){ closeOverlay("pinModal"); $("pinInput").blur(); renderAdmin(); openOverlay("admin"); }
+  else if (v.length >= CONFIG.adminPin.length){ $("pinErr").style.display = "block"; setTimeout(() => { $("pinInput").value = ""; }, 400); }
+});
+
+function renderAdmin(){
+  const E = Store.entries;
+  $("sCount").textContent = E.length;
+  $("sContact").textContent = E.filter(e => e.consentContact).length;
+  $("sExport").textContent = Store.meta("lastExport") || "noch nie";
+  $("persistInfo").textContent = "";
+  $("winnerOut").innerHTML = "";
+  const head = `<tr><th>Nr.</th><th>Zeitpunkt</th><th class="num">Tipp</th><th>Name</th><th>E-Mail</th><th>Telefon</th><th>Kontakt</th></tr>`;
+  const rows = E.slice().reverse().map((e, i) => `<tr><td>${E.length - i}</td><td>${esc(e.tsLocal)}</td><td class="num">${nf.format(e.tip)}</td><td>${esc(e.first)} ${esc(e.last)}</td><td>${esc(e.email)}</td><td>${esc(e.phone || "–")}</td><td>${e.consentContact ? "Ja" : "Nein"}</td></tr>`).join("");
+  $("entryTable").innerHTML = head + (rows || `<tr><td colspan="7" class="muted">Noch keine Teilnahmen.</td></tr>`);
+}
+
+/* ---------- Excel-Export ---------- */
+async function exportExcel(){
+  if (typeof XLSX === "undefined"){ toast("Excel-Bibliothek nicht geladen."); return; }
+  const E = Store.entries;
+  if (!E.length){ toast("Noch keine Einträge zum Exportieren."); return; }
+  const rows = E.map((e, i) => ({
+    "Nr.": i + 1,
+    "Zeitpunkt": e.tsLocal,
+    "Tipp DAX-Endstand (Punkte)": e.tip,
+    "Vorname": e.first,
+    "Nachname": e.last,
+    "E-Mail": e.email,
+    "Telefon": e.phone || "",
+    "Einwilligung Datenverarbeitung": e.consentData ? "Ja" : "Nein",
+    "Einwilligung Kontaktaufnahme": e.consentContact ? "Ja" : "Nein",
+    "Version Einwilligungstexte": e.textVersion,
+    "Zeitstempel (UTC)": e.ts,
+    "Eintrags-ID": e.id
+  }));
+  const ws = XLSX.utils.json_to_sheet(rows);
+  ws["!cols"] = [6, 20, 24, 16, 18, 30, 18, 16, 16, 16, 26, 18].map(w => ({wch: w}));
+  for (let r = 2; r <= rows.length + 1; r++){ const c = ws["C" + r]; if (c) c.z = "#,##0.00"; }
+  ws["!autofilter"] = { ref: `A1:L${rows.length + 1}` };
+
+  const textRows = [
+    { "Version": CONFIG.textVersion, "Einwilligung": "Datenverarbeitung (Pflicht)", "Wortlaut": TEXTS.consentData },
+    { "Version": CONFIG.textVersion, "Einwilligung": "Kontaktaufnahme (freiwillig)", "Wortlaut": TEXTS.consentContact }
+  ];
+  const ws2 = XLSX.utils.json_to_sheet(textRows);
+  ws2["!cols"] = [{wch: 14}, {wch: 28}, {wch: 120}];
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Teilnahmen");
+  XLSX.utils.book_append_sheet(wb, ws2, "Einwilligungstexte");
+  const out = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+
+  const d = new Date();
+  const name = `MPPM_Gewinnspiel_DAX_Oktober_${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}.xlsx`;
+  const mime = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+  const blob = new Blob([out], { type: mime });
+
+  let done = false;
+  try {
+    const file = new File([blob], name, { type: mime });
+    if (navigator.canShare && navigator.canShare({ files: [file] })){
+      await navigator.share({ files: [file], title: name });
+      done = true;
+    }
+  } catch(e){
+    if (e && e.name === "AbortError") return; // Teilen abgebrochen
+  }
+  if (!done){
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob); a.download = name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 10000);
+  }
+  Store.meta("lastExport", `${localStamp(d)} (${E.length} Einträge)`);
+  renderAdmin();
+  toast("Export erstellt.");
+}
+$("btnExport").addEventListener("click", exportExcel);
+
+$("btnPersist").addEventListener("click", async () => {
+  let msg = `${Store.entries.length} Einträge gespeichert. `;
+  try {
+    if (navigator.storage && navigator.storage.persisted){
+      const p = await navigator.storage.persisted();
+      msg += p ? "Speicher ist als dauerhaft markiert." : "Der Browser hat den Speicher nicht als dauerhaft markiert – bitte regelmäßig exportieren.";
+    }
+  } catch(e){}
+  msg += Store.db ? " Sicherungskopie in IndexedDB aktiv." : " Keine Sicherungskopie möglich.";
+  msg += navigator.serviceWorker && navigator.serviceWorker.controller ? " Offline-Modus aktiv." : " Offline-Modus noch nicht aktiv (Seite einmal neu laden).";
+  $("persistInfo").textContent = msg;
+});
+
+$("btnClear").addEventListener("click", async () => {
+  if (!Store.entries.length){ toast("Keine Einträge vorhanden."); return; }
+  if (!Store.meta("lastExport") && !confirm("Es wurde noch nie exportiert. Trotzdem fortfahren?")) return;
+  const answer = prompt(`Achtung: Alle ${Store.entries.length} Einträge werden unwiderruflich gelöscht.\nZur Bestätigung bitte LÖSCHEN eingeben:`);
+  if ((answer || "").trim().toUpperCase() !== "LÖSCHEN"){ toast("Nicht gelöscht."); return; }
+  await Store.clear(); renderAdmin(); toast("Alle Einträge gelöscht.");
+});
+
+$("btnWinner").addEventListener("click", () => {
+  const close = parseNumber($("officialClose").value);
+  if (close === null || isNaN(close)){ toast("Bitte den Schlusskurs eingeben."); return; }
+  $("officialClose").value = nf.format(close);
+  const ranked = Store.entries
+    .map(e => ({ ...e, diff: Math.abs(e.tip - close) }))
+    .sort((a, b) => a.diff - b.diff || a.ts.localeCompare(b.ts))
+    .slice(0, 10);
+  if (!ranked.length){ $("winnerOut").innerHTML = `<p class="muted">Noch keine Teilnahmen.</p>`; return; }
+  $("winnerOut").innerHTML = `<div class="tablewrap" style="margin-bottom:6px"><table>
+    <tr><th>Platz</th><th>Name</th><th class="num">Tipp</th><th class="num">Abweichung</th><th>Abgegeben</th><th>E-Mail</th></tr>
+    ${ranked.map((e, i) => `<tr${i === 0 ? ' style="background:var(--blue-tint);font-weight:600"' : ""}><td>${i + 1}</td><td>${esc(e.first)} ${esc(e.last)}</td><td class="num">${nf.format(e.tip)}</td><td class="num">${nf.format(e.diff)}</td><td>${esc(e.tsLocal)}</td><td>${esc(e.email)}</td></tr>`).join("")}
+  </table></div><p class="muted">Bei gleicher Abweichung gewinnt der früher abgegebene Tipp.</p>`;
+});
+
+/* =========================================================
+   Start
+   ========================================================= */
+$("consentDataText").textContent = TEXTS.consentData;
+$("consentContactText").textContent = TEXTS.consentContact;
+$("termsBody").innerHTML = TERMS_HTML;
+$("closeDateText").textContent = CONFIG.closeDateText;
+if (CONFIG.phoneRequired) $("phoneOpt").hidden = true;
+
+Store.init().catch(() => {});
+
+if ("serviceWorker" in navigator && location.protocol !== "file:"){
+  navigator.serviceWorker.register("sw.js").catch(() => {});
+}
+// Kein Kontextmenü / Ziehen im Kioskbetrieb
+document.addEventListener("contextmenu", e => { if (e.target.tagName !== "INPUT") e.preventDefault(); });
+document.addEventListener("gesturestart", e => e.preventDefault());
+</script>
+</body>
+</html>
