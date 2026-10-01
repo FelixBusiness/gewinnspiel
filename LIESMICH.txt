@@ -1,0 +1,74 @@
+MPPM GEWINNSPIEL „DAX-ENDSTAND OKTOBER“ – ANLEITUNG
+====================================================
+
+INHALT DES ORDNERS
+  index.html             Die App (Oberfläche, Datenspeicher, Excel-Export)
+  sw.js                  Sorgt dafür, dass die App ohne Internet läuft
+  manifest.webmanifest   App-Name und Symbol für den Home-Bildschirm
+  vendor/, fonts/, icons/  Excel-Bibliothek, Schrift „Inter“, App-Symbole
+
+Optional: Das Original-Logo von mppm.com als Datei „logo.svg“ (weiße Variante für dunklen
+Hintergrund) direkt neben index.html legen. Ohne Datei erscheint der Schriftzug „MPPM“.
+
+
+1. VOR DEM EINSATZ ANPASSEN (oben im Skriptteil von index.html, Abschnitt CONFIG)
+  - adminPin       Verwaltungs-PIN, Standard 4711 – unbedingt ändern
+  - contactEmail   Adresse für den Widerruf, aktuell test@mppm.com
+  - phoneRequired  true, wenn die Telefonnummer Pflicht sein soll
+  Teilnahmebedingungen stehen im Abschnitt TERMS_HTML – bitte rechtlich prüfen lassen.
+
+
+2. HOCHLADEN (einmalig, etwa zehn Minuten)
+  Die App braucht einmal eine sichere Internetadresse (https), damit das iPad sie
+  installieren kann. Dort liegt nur das leere Formular – niemals Teilnehmerdaten.
+
+  Variante GitHub Pages:
+    a) Kostenloses Konto auf github.com, neues öffentliches Repository anlegen
+    b) „Add file → Upload files“, den kompletten Ordnerinhalt hineinziehen, speichern
+    c) Settings → Pages → Branch „main“, Ordner „/ (root)“ → Save
+    d) Nach etwa einer Minute erscheint die Adresse, z. B. https://name.github.io/gewinnspiel/
+
+  Variante Netlify: Konto auf netlify.com anlegen, unter „Sites“ den Ordner per
+  Drag-and-drop hochladen.
+
+
+3. AUF DEM IPAD INSTALLIEREN (mit Internet)
+  a) Adresse in Safari öffnen
+  b) Teilen-Symbol → „Zum Home-Bildschirm“ → Hinzufügen
+  c) App über das neue Symbol öffnen, einmal schließen und erneut öffnen
+  d) Test: Flugmodus an, App öffnen – sie muss vollständig erscheinen
+  e) In der Verwaltung „Speicherstatus prüfen“ → sollte „Offline-Modus aktiv“ zeigen
+
+  WICHTIG: Immer über das Symbol auf dem Home-Bildschirm starten, nie über einen
+  Safari-Tab. Beide haben getrennte Speicher.
+
+
+4. IPAD ALS KIOSK SPERREN
+  Einstellungen → Bedienungshilfen → Geführter Zugriff → einschalten, Code festlegen.
+  App öffnen, dreimal die obere Taste (oder Home-Taste) drücken → Starten.
+  Beenden: erneut dreimal drücken, Code eingeben.
+  Empfehlung: Automatische Sperre auf „Nie“, Gerät ans Ladekabel, Auto-Ausfüllen in
+  Safari und Kontakte auf dem Gerät deaktivieren bzw. leer lassen.
+
+
+5. VERWALTUNG
+  Öffnen: fünfmal schnell auf das MPPM-Logo oben links tippen, PIN eingeben.
+  - Als Excel exportieren: öffnet das Teilen-Menü → „In Dateien sichern“, Mail oder AirDrop.
+    Die Datei enthält alle Teilnahmen mit Zeitstempel und ein zweites Blatt mit dem
+    Wortlaut der Einwilligungstexte (Nachweis).
+  - Gewinner ermitteln: offiziellen Schlusskurs eingeben → Rangliste, bei gleicher
+    Abweichung gewinnt der frühere Tipp.
+  - Alle Einträge löschen: nur nach erfolgtem Export, Bestätigung mit „LÖSCHEN“.
+
+  Bitte jeden Abend exportieren. Die Daten liegen ausschließlich auf diesem iPad.
+
+
+6. WAS DIE APP AUTOMATISCH TUT
+  - Prüft Tipp, Pflichtfelder, E-Mail-Format und doppelte Teilnahmen (gleiche E-Mail)
+  - Speichert doppelt (localStorage und IndexedDB) und kontrolliert jede Speicherung
+  - Danke-Bildschirm, danach automatisch leeres Formular für die nächste Person
+  - Leert ein halb ausgefülltes Formular nach 90 Sekunden ohne Eingabe
+
+7. SPÄTERE ÄNDERUNGEN
+  Dateien ändern, in sw.js die VERSION hochzählen (z. B. v2), neu hochladen und die App
+  auf dem iPad einmal mit Internet öffnen. Gespeicherte Teilnahmen bleiben erhalten.
