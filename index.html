@@ -1,0 +1,943 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MPPM Gewinnspiel">
+<meta name="format-detection" content="telephone=no">
+<meta name="theme-color" content="#2c355d">
+<title>MPPM Gewinnspiel</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icon-192.png">
+<style>
+@font-face{font-family:"Inter";font-style:normal;font-display:swap;font-weight:100 900;src:url(inter-latin-wght-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Inter";font-style:normal;font-display:swap;font-weight:100 900;src:url(inter-latin-ext-wght-normal.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+
+:root{
+  --blue:#1200dd; --blue-hover:#0e00b1; --blue-soft:#8980ee; --blue-tint:#eceafd;
+  --navy:#2c355d; --navy-deep:#1d2444; --ink:#2c355d; --muted:#666e90;
+  --line:#d6d9e6; --field:#f5f6fa; --bg:#ffffff; --error:#c4262e; --ok:#1a7f4b; --warn:#f59e0b;
+  --radius:12px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--navy-deep)}
+body{font-family:"Inter",system-ui,-apple-system,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased;
+  touch-action:manipulation;-webkit-user-select:none;user-select:none;overscroll-behavior:none;font-feature-settings:"tnum" 1,"cv11" 1}
+input,label,button{font:inherit;color:inherit}
+input{-webkit-user-select:text;user-select:text}
+
+.app{display:grid;grid-template-columns:minmax(0,44fr) minmax(0,56fr);height:100vh;height:100dvh}
+
+/* ---------- linke Seite: Spiel ---------- */
+.stage{position:relative;overflow:hidden;color:#fff;background:var(--navy);
+  padding:calc(env(safe-area-inset-top) + 34px) 40px 30px calc(env(safe-area-inset-left) + 40px);
+  display:flex;flex-direction:column;gap:24px}
+.stage::before{content:"";position:absolute;inset:auto -30% -45% -30%;height:85%;
+  background:radial-gradient(closest-side,rgba(18,0,221,.55),rgba(18,0,221,0));pointer-events:none}
+.stage::after{content:"";position:absolute;left:0;right:0;bottom:0;height:5px;background:var(--blue)}
+.stage > *{position:relative}
+.brand{position:relative;display:inline-flex;align-self:flex-start;align-items:center;background:#fff;border-radius:12px;padding:13px 20px;cursor:pointer;box-shadow:0 8px 24px rgba(8,10,40,.25)}
+.brand img{height:30px;width:auto;display:block}
+.brand .wordmark{color:var(--navy)}
+.brand.due::after{content:"";position:absolute;top:-5px;right:-5px;width:14px;height:14px;border-radius:50%;background:var(--warn);border:2.5px solid var(--navy)}
+.wordmark[hidden]{display:none}
+.wordmark{display:flex;flex-direction:column;line-height:1}
+.wordmark b{font-size:26px;font-weight:800;letter-spacing:.06em}
+.wordmark span{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;opacity:.72;margin-top:6px}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#c9c4ff}
+.eyebrow::before{content:"";width:28px;height:2px;background:#c9c4ff}
+h1{font-size:clamp(34px,4.1vw,50px);line-height:1.05;letter-spacing:-.025em;font-weight:750;margin:12px 0 14px}
+.lead{font-size:17px;line-height:1.5;color:rgba(255,255,255,.82);margin:0;max-width:30em}
+.lead strong{color:#fff;font-weight:600}
+
+.tip{background:#fff;color:var(--ink);border-radius:16px;padding:18px 22px 16px;box-shadow:0 18px 40px rgba(8,10,40,.35)}
+.tip label{display:block;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.tip-row{display:flex;align-items:baseline;gap:12px;margin-top:6px;border-bottom:2px solid var(--line);transition:border-color .15s}
+.tip-row:focus-within{border-color:var(--blue)}
+.tip input{flex:1;min-width:0;border:0;outline:0;background:transparent;font-size:clamp(36px,4.2vw,48px);font-weight:700;letter-spacing:-.02em;padding:4px 0 8px;color:var(--navy-deep)}
+.tip input::placeholder{color:#c3c7d8;font-weight:600}
+.tip .unit{font-size:18px;font-weight:600;color:var(--muted)}
+.tip .hint{font-size:13.5px;color:var(--muted);margin-top:10px;line-height:1.4}
+.tip.invalid .tip-row{border-color:var(--error)}
+
+.prize{display:flex;align-items:center;gap:22px;margin-top:auto;padding-top:6px}
+.prize svg{flex:none;width:112px;height:auto}
+.prize small{display:block;font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#c9c4ff}
+.prize strong{display:block;font-size:clamp(28px,3.1vw,36px);font-weight:750;letter-spacing:-.02em;margin-top:6px}
+.prize p{margin:6px 0 0;font-size:14px;color:rgba(255,255,255,.7)}
+
+/* ---------- rechte Seite: Formular ---------- */
+.form{background:var(--bg);overflow-y:auto;-webkit-overflow-scrolling:touch;
+  padding:calc(env(safe-area-inset-top) + 26px) calc(env(safe-area-inset-right) + 40px) 22px 40px;display:flex;flex-direction:column}
+.notice{background:var(--field);border-radius:var(--radius);padding:12px 16px;margin-bottom:18px;font-size:11.5px;line-height:1.5;color:#4b5376}
+.notice p{margin:0}
+.notice p + p{margin-top:5px}
+.notice b{color:var(--ink);font-weight:650}
+.form h2{font-size:22px;font-weight:700;letter-spacing:-.015em;margin:0 0 14px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 16px}
+.field label{display:block;font-size:14px;font-weight:600;margin:0 0 6px}
+.field label em{font-style:normal;font-weight:500;color:var(--muted)}
+.field input{width:100%;height:50px;border:1.5px solid var(--line);border-radius:var(--radius);background:var(--field);
+  padding:0 16px;font-size:17px;outline:0;transition:border-color .15s,background .15s,box-shadow .15s;-webkit-appearance:none;appearance:none}
+.field input::placeholder{color:#a9afc6}
+.field input:focus{border-color:var(--blue);background:#fff;box-shadow:0 0 0 4px rgba(18,0,221,.10)}
+.field.invalid input{border-color:var(--error);background:#fff}
+.err{display:none;color:var(--error);font-size:13px;font-weight:500;margin-top:5px}
+.invalid > .err, .tip.invalid .err{display:block}
+
+.consents{margin-top:16px;display:flex;flex-direction:column;gap:10px}
+.check{display:grid;grid-template-columns:30px 1fr;gap:14px;align-items:start;padding:12px 16px;border:1.5px solid var(--line);border-radius:var(--radius);cursor:pointer;transition:border-color .15s,background .15s}
+.check input{position:absolute;opacity:0;pointer-events:none}
+.box{width:30px;height:30px;border-radius:8px;border:2px solid #aab0c8;background:#fff;display:grid;place-items:center;transition:all .15s;margin-top:1px}
+.box svg{width:18px;height:18px;opacity:0;transform:scale(.6);transition:all .15s}
+.check input:checked + .box{background:var(--blue);border-color:var(--blue)}
+.check input:checked + .box svg{opacity:1;transform:none}
+.check:has(input:checked){border-color:var(--blue-soft);background:var(--blue-tint)}
+.check.invalid{border-color:var(--error)}
+.check-text{font-size:14px;line-height:1.5;color:#3d4568}
+.linkish{color:var(--blue);font-weight:600;text-decoration:underline;text-underline-offset:2px;background:none;border:0;padding:0;cursor:pointer;font-size:inherit}
+
+.submitbar{position:sticky;bottom:-22px;margin:0 -2px;padding:14px 2px 22px;background:linear-gradient(rgba(255,255,255,0),#fff 22%)}
+.submit{height:60px;width:100%;border:0;border-radius:var(--radius);background:var(--blue);color:#fff;font-size:19px;font-weight:650;letter-spacing:.005em;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:10px;transition:background .15s,transform .08s;box-shadow:0 8px 20px rgba(18,0,221,.18)}
+.submit:active{background:var(--blue-hover);transform:scale(.99)}
+.submit svg{width:22px;height:22px}
+.foot{margin-top:auto;padding-top:6px;font-size:12px;color:#8a91ad;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,140%);background:var(--navy-deep);color:#fff;padding:14px 22px;border-radius:12px;font-size:15px;font-weight:500;
+  box-shadow:0 12px 30px rgba(0,0,0,.3);transition:transform .25s,opacity .25s;z-index:60;max-width:90vw;text-align:center;opacity:0;pointer-events:none}
+.toast.show{transform:translate(-50%,0);opacity:1}
+
+/* ---------- Überlagerungen ---------- */
+.overlay{position:fixed;inset:0;display:none;z-index:50}
+.overlay.open{display:flex}
+.thanks{background:var(--navy);color:#fff;align-items:center;justify-content:center;text-align:center;flex-direction:column;padding:40px}
+.thanks::after{content:"";position:absolute;left:0;right:0;bottom:0;height:5px;background:var(--blue)}
+.thanks .seal{width:96px;height:96px;border-radius:50%;background:var(--blue);display:grid;place-items:center;margin-bottom:28px;box-shadow:0 0 0 14px rgba(18,0,221,.25)}
+.thanks .seal svg{width:46px;height:46px}
+.thanks h2{font-size:44px;letter-spacing:-.02em;margin:0 0 12px;font-weight:750}
+.thanks p{font-size:19px;line-height:1.5;color:rgba(255,255,255,.82);margin:0;max-width:34em}
+.thanks .yourtip{margin:28px 0 8px;font-size:15px;letter-spacing:.14em;text-transform:uppercase;color:#c9c4ff;font-weight:600}
+.thanks .tipval{font-size:56px;font-weight:750;letter-spacing:-.02em}
+.thanks .again{margin-top:40px;font-size:15px;color:rgba(255,255,255,.6)}
+
+.modal{background:rgba(16,20,45,.55);align-items:center;justify-content:center;padding:28px}
+.sheet{background:#fff;border-radius:18px;width:min(900px,100%);max-height:100%;display:flex;flex-direction:column;box-shadow:0 30px 70px rgba(0,0,0,.35)}
+.sheet header{display:flex;align-items:center;justify-content:space-between;padding:18px 26px;border-bottom:1px solid var(--line)}
+.sheet header h3{margin:0;font-size:21px;font-weight:700}
+.sheet .body{padding:20px 26px 26px;overflow-y:auto;-webkit-overflow-scrolling:touch;-webkit-user-select:text;user-select:text}
+.sheet .body h4{margin:20px 0 6px;font-size:15px}
+.sheet .body h4:first-child{margin-top:0}
+.sheet .body p,.sheet .body li{font-size:14.5px;line-height:1.55;color:#3d4568;margin:0 0 8px}
+.sheet .body ol{padding-left:22px;margin:0}
+.terms-title{font-size:16px!important;font-weight:650;color:var(--ink)!important;margin-bottom:14px!important}
+.x{width:44px;height:44px;border-radius:50%;border:0;background:var(--field);font-size:24px;line-height:1;cursor:pointer}
+.small{width:min(420px,100%)}
+
+.pin{display:flex;gap:12px;justify-content:center;margin:8px 0 6px}
+.pin input{width:100%;height:60px;text-align:center;font-size:28px;letter-spacing:.5em;border:1.5px solid var(--line);border-radius:12px;background:var(--field);outline:0}
+.pin input:focus{border-color:var(--blue);background:#fff}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+.stat{background:var(--field);border-radius:12px;padding:12px 14px}
+.stat small{display:block;font-size:11.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.stat b{display:block;font-size:26px;font-weight:700;margin-top:4px}
+.stat span{display:block;font-size:13.5px;font-weight:600;margin-top:5px;line-height:1.35}
+.stat.alert{background:#fff4e0}
+.btns{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px}
+.btn{height:46px;padding:0 16px;border-radius:10px;border:1.5px solid var(--line);background:#fff;font-weight:600;font-size:14.5px;cursor:pointer}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+.btn.danger{color:var(--error);border-color:#f0c4c6}
+.btn.sm{height:36px;padding:0 12px;font-size:13px}
+.btn:active{transform:scale(.98)}
+.inline{display:flex;gap:10px;align-items:center;margin:6px 0 10px;flex-wrap:wrap}
+.inline input[type=text],.inline input:not([type]){height:46px;border:1.5px solid var(--line);border-radius:10px;padding:0 14px;font-size:16px;background:var(--field);outline:0;width:220px}
+.inline label{font-size:13.5px;color:var(--muted);display:flex;align-items:center;gap:8px}
+.inline input[type=checkbox]{width:20px;height:20px}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{text-align:left;padding:9px 8px;border-bottom:1px solid #eceef5;white-space:nowrap}
+th{font-size:12px;font-weight:650;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);position:sticky;top:0;background:#fff}
+td.num,th.num{text-align:right}
+tr.tie td{background:#fff4e0}
+.tablewrap{max-height:280px;overflow:auto;border:1px solid var(--line);border-radius:10px}
+.muted{color:var(--muted);font-size:13.5px}
+
+/* ---------- Hochformat ---------- */
+@media (max-width: 900px), (orientation: portrait){
+  .app{grid-template-columns:1fr;height:auto;min-height:100vh}
+  .stage{padding:calc(env(safe-area-inset-top) + 30px) 36px 34px;gap:22px}
+  .prize{margin-top:4px}
+  .form{overflow:visible;padding:30px 36px 24px}
+  .submitbar{bottom:0}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- Spielbereich -->
+  <section class="stage">
+    <div class="brand" id="brand" aria-label="MPPM">
+      <img id="logo" src="logo.png" alt="MPPM" onerror="this.remove();document.getElementById('wordmark').hidden=false">
+      <div class="wordmark" id="wordmark" hidden><b>MPPM</b><span>Manfred Piontke Vermögensverwaltung</span></div>
+    </div>
+
+    <div>
+      <div class="eyebrow">Gewinnspiel</div>
+      <h1>DAX-Endstand<br>Oktober</h1>
+      <p class="lead">Wo schließt der DAX am <strong>Freitag, 30. Oktober 2026</strong>? Wer mit seiner Schätzung am nächsten am offiziellen Schlussstand liegt, gewinnt.</p>
+    </div>
+
+    <div class="tip" id="tipBox">
+      <label for="tip">Ihre Schätzung</label>
+      <div class="tip-row">
+        <input id="tip" inputmode="decimal" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="z. B. 24.350" maxlength="12">
+        <span class="unit">Punkte</span>
+      </div>
+      <div class="err" id="tipErr">Bitte geben Sie einen gültigen Indexstand ein.</div>
+      <div class="hint">Bis zu zwei Nachkommastellen. Eine abgesendete Schätzung kann nicht mehr geändert werden.</div>
+    </div>
+
+    <div class="prize">
+      <svg viewBox="0 0 120 92" fill="none" aria-hidden="true">
+        <rect x="6" y="4" width="108" height="80" rx="9" stroke="#fff" stroke-width="2.4"/>
+        <rect x="13" y="11" width="94" height="66" rx="3" fill="#1200dd"/>
+        <path d="M13 58 C 32 52, 44 66, 62 52 S 92 34, 107 40 L107 77 L13 77 Z" fill="#fff" fill-opacity=".14"/>
+        <path d="M13 64 C 34 58, 48 70, 66 60 S 94 46, 107 50" stroke="#fff" stroke-opacity=".5" stroke-width="1.6"/>
+        <circle cx="60" cy="7.5" r="1.3" fill="#fff"/>
+        <rect x="40" y="86" width="40" height="3" rx="1.5" fill="#fff" fill-opacity=".35"/>
+      </svg>
+      <div>
+        <small>Zu gewinnen</small>
+        <strong>ein iPad Air 11″</strong>
+        <p>Apple iPad Air 11 Zoll (M4), 512 GB, Space Grau</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Formular -->
+  <section class="form">
+    <div class="notice" id="notice"></div>
+    <form id="entryForm" novalidate autocomplete="off">
+      <h2>Ihre Angaben</h2>
+
+      <div class="grid">
+        <div class="field" id="f-first">
+          <label for="first">Vorname</label>
+          <input id="first" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" maxlength="60">
+          <div class="err">Bitte Vornamen angeben.</div>
+        </div>
+        <div class="field" id="f-last">
+          <label for="last">Nachname</label>
+          <input id="last" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" maxlength="60">
+          <div class="err">Bitte Nachnamen angeben.</div>
+        </div>
+        <div class="field" id="f-email">
+          <label for="email">E-Mail-Adresse</label>
+          <input id="email" type="email" inputmode="email" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" maxlength="120">
+          <div class="err" id="emailErr">Bitte eine gültige E-Mail-Adresse angeben.</div>
+        </div>
+        <div class="field" id="f-phone">
+          <label for="phone">Telefonnummer <em id="phoneOpt">(optional)</em></label>
+          <input id="phone" type="tel" inputmode="tel" autocomplete="off" autocorrect="off" spellcheck="false" maxlength="30">
+          <div class="err">Bitte eine gültige Telefonnummer angeben.</div>
+        </div>
+        <div class="field" id="f-birth">
+          <label for="birth">Geburtsdatum</label>
+          <input id="birth" inputmode="numeric" autocomplete="off" autocorrect="off" spellcheck="false" maxlength="10" placeholder="TT.MM.JJJJ">
+          <div class="err" id="birthErr">Bitte ein gültiges Geburtsdatum angeben.</div>
+        </div>
+      </div>
+
+      <div class="consents">
+        <label class="check" id="c-data">
+          <input type="checkbox" id="consentData">
+          <span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+          <span class="check-text">Ich bin mindestens 18 Jahre alt, habe meinen Wohnsitz in Deutschland, Österreich oder der Schweiz und akzeptiere die Teilnahmebedingungen sowie die Datenschutzhinweise zum Gewinnspiel (<button type="button" class="linkish" id="termsInline">hier abrufbar</button>).</span>
+        </label>
+        <label class="check" id="c-contact">
+          <input type="checkbox" id="consentContact">
+          <span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+          <span class="check-text" id="consentContactText"></span>
+        </label>
+      </div>
+
+      <div class="submitbar">
+        <button class="submit" type="submit">
+          Jetzt teilnehmen
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+    </form>
+    <div class="foot">
+      <span>MPPM GmbH · Rödelbergweg 1 · 65817 Eppstein</span>
+      <button class="linkish" type="button" id="openTerms">Teilnahmebedingungen &amp; Datenschutz</button>
+    </div>
+  </section>
+</div>
+
+<!-- Danke-Bildschirm -->
+<div class="overlay thanks" id="thanks">
+  <div class="seal"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+  <h2 id="thanksTitle">Vielen Dank!</h2>
+  <p>Ihre Teilnahme ist gespeichert. Wir drücken Ihnen die Daumen. Der Gewinner wird innerhalb von 7 Tagen nach dem 30.10.2026 per E-Mail benachrichtigt.</p>
+  <div class="yourtip">Ihre Schätzung</div>
+  <div class="tipval" id="thanksTip"></div>
+  <div class="again" id="thanksAgain"></div>
+</div>
+
+<!-- Teilnahmebedingungen -->
+<div class="overlay modal" id="terms">
+  <div class="sheet">
+    <header><h3>Teilnahmebedingungen &amp; Datenschutz</h3><button class="x" data-close>&times;</button></header>
+    <div class="body" id="termsBody"></div>
+  </div>
+</div>
+
+<!-- PIN -->
+<div class="overlay modal" id="pinModal">
+  <div class="sheet small">
+    <header><h3>Verwaltung</h3><button class="x" data-close>&times;</button></header>
+    <div class="body">
+      <p class="muted">Bitte die Verwaltungs-PIN eingeben.</p>
+      <div class="pin"><input id="pinInput" type="password" inputmode="numeric" maxlength="8" autocomplete="off"></div>
+      <div class="err" id="pinErr" style="text-align:center">Falsche PIN.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Verwaltung -->
+<div class="overlay modal" id="admin">
+  <div class="sheet">
+    <header><h3>Verwaltung · Gewinnspiel</h3><button class="x" data-close>&times;</button></header>
+    <div class="body">
+      <div class="stats">
+        <div class="stat"><small>Teilnahmen</small><b id="sCount">0</b></div>
+        <div class="stat"><small>E-Mail-Infos erlaubt</small><b id="sContact">0</b></div>
+        <div class="stat"><small>Automatische Sicherung</small><span id="sAuto">noch keine</span></div>
+        <div class="stat" id="sExportBox"><small>Letzte Excel-Datei</small><span id="sExport">noch nie</span></div>
+      </div>
+      <div class="btns">
+        <button class="btn primary" id="btnExport">Als Excel exportieren</button>
+        <button class="btn" id="btnPersist">Speicherstatus prüfen</button>
+        <button class="btn danger" id="btnClear">Alle Einträge löschen</button>
+      </div>
+      <p class="muted" id="persistInfo"></p>
+
+      <h4>Sicherungen</h4>
+      <p class="muted">Die App legt jede Stunde automatisch eine Sicherungskopie mit Zeitstempel auf diesem iPad an (die letzten 72). Jede Sicherung lässt sich hier als Excel-Datei speichern – im Teilen-Menü „In Dateien sichern“ wählen, das iPad merkt sich den zuletzt gewählten Ordner.</p>
+      <div class="btns"><button class="btn" id="btnBackupNow">Jetzt sichern</button></div>
+      <div class="tablewrap" style="max-height:200px"><table id="backupTable"></table></div>
+
+      <h4>Gewinner ermitteln</h4>
+      <div class="inline">
+        <input id="officialClose" inputmode="decimal" placeholder="Offizieller Schlussstand" autocomplete="off">
+        <button class="btn" id="btnWinner">Rangliste berechnen</button>
+        <label><input type="checkbox" id="includeOutside"> auch Einträge außerhalb des Teilnahmezeitraums (Tests)</label>
+      </div>
+      <div id="winnerOut"></div>
+
+      <h4>Alle Einträge</h4>
+      <div class="tablewrap"><table id="entryTable"></table></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="xlsx.mini.min.js"></script>
+<script>
+"use strict";
+/* =========================================================
+   EINSTELLUNGEN – hier anpassen
+   ========================================================= */
+const CONFIG = {
+  adminPin: "4711",                         // PIN für den Verwaltungsbereich – bitte ändern!
+  contactEmail: "post@mppm.com",            // Adresse für Widerruf (laut Disclaimer)
+  company: "MPPM GmbH",
+  phoneRequired: false,                     // true = Telefonnummer ist Pflichtfeld
+  minAge: 18,
+  periodStart: new Date(2026, 9, 17, 9, 0),   // 17.10.2026, 09:00 Uhr
+  periodEnd:   new Date(2026, 9, 18, 17, 30), // 18.10.2026, 17:30 Uhr
+  tipMin: 1000, tipMax: 100000,             // Plausibilitätsgrenzen für die Schätzung
+  idleResetSeconds: 90,                     // Formular leert sich nach so vielen Sekunden ohne Eingabe
+  thanksSeconds: 8,                         // Dauer des Danke-Bildschirms
+  backupEveryMinutes: 60,                   // automatische Sicherung
+  backupKeep: 72,                           // so viele Sicherungen werden aufbewahrt
+  exportReminderMinutes: 60,                // danach erscheint ein orangefarbener Punkt am Logo
+  textVersion: "2026-10-v3",                // bei Änderung der Einwilligungstexte hochzählen
+  storageKey: "mppm_gewinnspiel_dax_2026_10"
+};
+
+const TEXTS = {
+  consentData:
+    "Ich bin mindestens 18 Jahre alt, habe meinen Wohnsitz in Deutschland, Österreich oder der Schweiz und akzeptiere die Teilnahmebedingungen sowie die Datenschutzhinweise zum Gewinnspiel (hier abrufbar).",
+  consentContact:
+    `Ich möchte künftig per E-Mail Informationen der MPPM GmbH zu Marktthemen, Veranstaltungen und Leistungen erhalten. Diese Einwilligung kann ich jederzeit mit Wirkung für die Zukunft widerrufen, z. B. über den Abmeldelink oder per E-Mail an ${CONFIG.contactEmail}.`
+};
+
+/* A. Kurzhinweis – Kopfzeile über dem Formular */
+const NOTICE_HTML = `
+  <p><b>Gewinnspiel:</b> Schätzen Sie den DAX-Schlussstand am 30.10.2026. Wer am nächsten liegt, gewinnt ein Apple iPad Air 11″ (M4, 512 GB); bei Gleichstand entscheidet das Los. Veranstalter ist die MPPM GmbH, Rödelbergweg 1, 65817 Eppstein. Teilnahme nur auf den Baader Trading Days, am MPPM-Stand oder bei den MPPM-Hostessen auf dem Messegelände, vom 17.10.2026, 09:00 Uhr, bis 18.10.2026, 17:30 Uhr. Teilnahmeberechtigt sind Personen ab 18 Jahren mit Wohnsitz in Deutschland, Österreich oder der Schweiz. Die Teilnahme ist kostenlos und unabhängig von einem Vertragsabschluss, einer Anlage oder einer Kontoeröffnung. Eine Barauszahlung ist ausgeschlossen. Mitarbeitende der MPPM GmbH und ihre Angehörigen sind ausgeschlossen. Die vollständigen Teilnahmebedingungen und Datenschutzhinweise können vor der Teilnahme auf dem iPad aufgerufen werden und liegen am MPPM-Stand aus. Apple und iPad sind Marken der Apple Inc.; DAX® ist eine eingetragene Marke. Apple, Deutsche Börse und STOXX sind weder Sponsor noch Veranstalter dieses Gewinnspiels.</p>
+  <p>Die Schätzungen sind keine Prognose der MPPM GmbH. Diese Mitteilung stellt keine Anlageberatung und kein Angebot zum Kauf oder Verkauf von Finanzinstrumenten dar.</p>
+`;
+
+/* B. Teilnahmebedingungen */
+const TERMS_HTML = `
+  <p class="terms-title">Teilnahmebedingungen für das DAX-Schätzspiel der MPPM GmbH auf den Baader Trading Days 2026</p>
+
+  <h4>§ 1 Veranstalter</h4>
+  <p>Veranstalter des Gewinnspiels ist die MPPM GmbH (Manfred Piontke Portfolio Management), Rödelbergweg 1, 65817 Eppstein, vertreten durch die Geschäftsführer Manfred Piontke und Dr. Thomas Meyer, eingetragen beim Amtsgericht Königstein im Taunus unter HRB 11063, E-Mail: post@mppm.com, Telefon: +49 (0) 6198 588 37 90 („Veranstalter“). Mit der Teilnahme akzeptiert der Teilnehmer diese Teilnahmebedingungen.</p>
+
+  <h4>§ 2 Gegenstand und Teilnahmezeitraum</h4>
+  <ol>
+    <li>Die Teilnehmer schätzen den Schlussstand des DAX® am Freitag, 30.10.2026.</li>
+    <li>Die Teilnahme ist vom 17.10.2026, 09:00 Uhr, bis zum 18.10.2026, 17:30 Uhr (MESZ) möglich, und zwar ausschließlich vor Ort auf den Baader Trading Days im Munich Urban Colab, Freddie-Mercury-Straße 5, 80797 München, am Stand des Veranstalters oder bei den vom Veranstalter beauftragten Hostessen auf dem Messegelände. Maßgeblich ist der Zeitpunkt, zu dem das Teilnahmeformular abgesendet wird.</li>
+  </ol>
+
+  <h4>§ 3 Teilnahmeberechtigung</h4>
+  <ol>
+    <li>Teilnahmeberechtigt sind natürliche Personen, die das 18. Lebensjahr vollendet haben und ihren Wohnsitz in Deutschland, Österreich oder der Schweiz haben.</li>
+    <li>Ausgeschlossen sind Mitarbeitende des Veranstalters, an der Durchführung des Gewinnspiels beteiligte Dienstleister sowie jeweils deren Angehörige.</li>
+    <li>Jede Person darf nur einmal teilnehmen. Mehrfachteilnahmen, auch unter verschiedenen Namen oder E-Mail-Adressen, führen zum Ausschluss.</li>
+  </ol>
+
+  <h4>§ 4 Teilnahme</h4>
+  <ol>
+    <li>Zur Teilnahme gibt der Teilnehmer auf einem der vom Veranstalter bereitgestellten iPads (am Stand oder bei den Hostessen) im Teilnahmeformular Vor- und Nachnamen, E-Mail-Adresse sowie seine Schätzung des DAX-Schlussstands in Indexpunkten mit bis zu zwei Nachkommastellen ein und sendet das Formular ab. Eine abgesendete Schätzung kann nicht mehr geändert werden. Unvollständige Einträge sind ungültig.</li>
+    <li>Die Teilnahme ist kostenlos. Sie ist insbesondere nicht an den Abschluss eines Vermögensverwaltungs- oder sonstigen Vertrags, an den Erwerb von Fondsanteilen oder Finanzinstrumenten oder an eine Kontoeröffnung geknüpft. Ob eine Geschäftsbeziehung zum Veranstalter besteht oder begründet wird, hat keinen Einfluss auf die Gewinnchance. Für die Teilnahme ist der Besuch der Baader Trading Days erforderlich; der Veranstalter erhebt dafür kein Entgelt.</li>
+    <li>Die Teilnahme setzt nicht voraus, dass der Teilnehmer in Werbung oder den Bezug eines Newsletters einwilligt.</li>
+  </ol>
+
+  <h4>§ 5 Gewinn</h4>
+  <ol>
+    <li>Zu gewinnen ist ein Apple iPad Air 11 Zoll (M4), Wi-Fi, 512 GB, Space Grau, neu und originalverpackt. Im Lieferumfang laut Hersteller sind das iPad und ein USB-C-Ladekabel enthalten, ein Netzteil ist nicht enthalten.</li>
+    <li>Eine Barauszahlung, ein Umtausch oder eine Übertragung des Gewinns auf Dritte ist ausgeschlossen.</li>
+    <li>Ist der Gewinn aus Gründen, die der Veranstalter nicht zu vertreten hat, nicht lieferbar, darf der Veranstalter einen gleichwertigen Ersatzgewinn stellen.</li>
+  </ol>
+
+  <h4>§ 6 Gewinnermittlung und Benachrichtigung</h4>
+  <ol>
+    <li>Maßgeblich ist der offizielle Schlussstand des DAX® (Xetra) am 30.10.2026, wie er nach Börsenschluss vom Indexanbieter veröffentlicht wird. Findet an diesem Tag kein Handel statt, gilt der Schlussstand des nächsten Handelstags. Spätere Korrekturen bleiben unberücksichtigt.</li>
+    <li>Gewinner ist, wessen Schätzung den Schlussstand genau trifft oder ihm am nächsten kommt, also die geringste Abweichung nach oben oder unten aufweist.</li>
+    <li>Haben mehrere Teilnehmer dieselbe geringste Abweichung, wird der Gewinner unter ihnen noch am 30.10.2026 nach Börsenschluss per Los ermittelt. Die Auslosung erfolgt unter Aufsicht von zwei Mitarbeitenden des Veranstalters und wird dokumentiert.</li>
+    <li>Der Gewinner wird innerhalb von 7 Tagen nach dem 30.10.2026 per E-Mail benachrichtigt. Meldet er sich nicht innerhalb von 14 Tagen nach der Benachrichtigung mit seiner Versandanschrift, verfällt der Anspruch auf den Gewinn. Der Gewinn geht dann an den Teilnehmer mit der nächstgeringeren Abweichung; bei Gleichstand gilt Absatz 3 entsprechend.</li>
+    <li>Der Gewinn wird kostenfrei an eine Anschrift in Deutschland, Österreich oder der Schweiz versandt. Etwaige Einfuhrabgaben (Zoll, Einfuhrumsatzsteuer) bei einem Versand in die Schweiz trägt der Veranstalter. Mit der Übergabe an das Versandunternehmen geht die Gefahr des Verlusts auf den Gewinner über.</li>
+    <li>Der Name des Gewinners wird nur veröffentlicht, wenn er vorher ausdrücklich eingewilligt hat.</li>
+  </ol>
+
+  <h4>§ 7 Ausschluss von Teilnehmern</h4>
+  <p>Der Veranstalter darf Teilnehmer ausschließen, die gegen diese Teilnahmebedingungen verstoßen, falsche Angaben machen oder das Gewinnspiel manipulieren oder zu manipulieren versuchen. In diesen Fällen kann ein Gewinn auch nachträglich aberkannt und zurückgefordert werden.</p>
+
+  <h4>§ 8 Vorzeitige Beendigung</h4>
+  <p>Der Veranstalter darf das Gewinnspiel aus wichtigem Grund ganz oder teilweise vorzeitig beenden oder unterbrechen, insbesondere wenn eine ordnungsgemäße Durchführung aus technischen oder rechtlichen Gründen nicht gewährleistet ist.</p>
+
+  <h4>§ 9 Haftung</h4>
+  <ol>
+    <li>Der Veranstalter haftet unbeschränkt für Vorsatz und grobe Fahrlässigkeit sowie für Schäden aus der Verletzung des Lebens, des Körpers oder der Gesundheit. Im Übrigen ist die Haftung ausgeschlossen, soweit gesetzlich zulässig.</li>
+    <li>Für Sachmängel am Gewinn gelten die Garantiebedingungen des Herstellers. Der Veranstalter übernimmt keine eigene Gewährleistung.</li>
+  </ol>
+
+  <h4>§ 10 Datenschutz</h4>
+  <ol>
+    <li>Verantwortlicher ist der Veranstalter (Kontakt siehe § 1). Datenschutzbeauftragter ist Dr. Thomas Meyer, erreichbar unter der Anschrift des Veranstalters mit dem Zusatz „Datenschutzbeauftragter“ oder per E-Mail an post@mppm.com.</li>
+    <li>Zur Durchführung des Gewinnspiels verarbeitet der Veranstalter Name, E-Mail-Adresse sowie die Schätzung der Teilnehmer, beim Gewinner zusätzlich die Versandanschrift. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO (Durchführung des Gewinnspiels).</li>
+    <li>Das Teilnahmeformular ist eine eigene Anwendung des Veranstalters, die auf den iPads offline läuft. Die Eingaben werden zunächst nur lokal auf den zugangsgeschützten iPads gespeichert, nach Ende der Baader Trading Days auf die Systeme des Veranstalters übertragen und anschließend von den iPads gelöscht. Eine Übermittlung an Dritte findet dabei nicht statt.</li>
+    <li>Die Daten werden ausschließlich für das Gewinnspiel genutzt und nur an Dienstleister weitergegeben, soweit dies für den Versand des Gewinns erforderlich ist. Sie werden spätestens 3 Monate nach der Gewinnermittlung gelöscht, soweit keine gesetzlichen Aufbewahrungspflichten entgegenstehen.</li>
+    <li>Eine Nutzung zu Werbezwecken, etwa für einen Newsletter, erfolgt nur mit gesonderter, freiwilliger Einwilligung (Art. 6 Abs. 1 lit. a DSGVO). Diese kann jederzeit mit Wirkung für die Zukunft widerrufen werden, z. B. per E-Mail an post@mppm.com.</li>
+    <li>Teilnehmer haben das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch (Art. 15 bis 21 DSGVO) sowie ein Beschwerderecht bei einer Datenschutz-Aufsichtsbehörde, etwa beim Hessischen Beauftragten für Datenschutz und Informationsfreiheit.</li>
+  </ol>
+
+  <h4>§ 11 Schlussbestimmungen</h4>
+  <ol>
+    <li>Das Gewinnspiel dient ausschließlich der allgemeinen Bekanntmachung des Veranstalters. Die Schätzungen der Teilnehmer sind keine Prognose des Veranstalters. Das Gewinnspiel stellt keine Anlageberatung, keine Anlageempfehlung und kein Angebot zum Kauf oder Verkauf von Finanzinstrumenten oder Fondsanteilen dar.</li>
+    <li>Apple und iPad sind Marken der Apple Inc. DAX® ist eine eingetragene Marke. Das Gewinnspiel steht in keiner Verbindung zu Apple, zur Deutsche Börse AG oder zur STOXX Ltd. und wird von diesen weder gesponsert noch unterstützt oder organisiert.</li>
+    <li>Es gilt das Recht der Bundesrepublik Deutschland. Zwingende Verbraucherschutzvorschriften des Staates, in dem der Teilnehmer seinen gewöhnlichen Aufenthalt hat, bleiben unberührt.</li>
+    <li>Sollten einzelne Bestimmungen unwirksam sein, bleibt die Wirksamkeit der übrigen Bestimmungen unberührt.</li>
+  </ol>
+  <p style="margin-top:14px">Stand: Oktober 2026</p>
+`;
+
+/* =========================================================
+   Hilfsfunktionen
+   ========================================================= */
+const $ = id => document.getElementById(id);
+const nf = new Intl.NumberFormat("de-DE", {minimumFractionDigits: 2, maximumFractionDigits: 2});
+
+function parseNumber(raw){
+  let s = String(raw || "").trim().replace(/[\s'’]/g, "");
+  if (!s) return null;
+  if (s.includes(",")) s = s.replace(/\./g, "").replace(",", ".");
+  else if (/^\d{1,3}(\.\d{3})+$/.test(s)) s = s.replace(/\./g, "");
+  if (!/^\d+(\.\d{1,2})?$/.test(s)) return NaN;
+  return Math.round(parseFloat(s) * 100) / 100;
+}
+const emailOk = s => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(s);
+const phoneOk = s => /^[+()\d\s\/-]{6,30}$/.test(s) && (s.match(/\d/g) || []).length >= 6;
+const pad = n => String(n).padStart(2, "0");
+function localStamp(d){ return `${pad(d.getDate())}.${pad(d.getMonth()+1)}.${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`; }
+function fileStamp(d){ return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}`; }
+function esc(s){ return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function toast(msg, ms = 2600){ const t = $("toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove("show"), ms); }
+function ago(iso){
+  if (!iso) return "";
+  const m = Math.round((Date.now() - new Date(iso).getTime()) / 60000);
+  if (m < 1) return "gerade eben";
+  if (m < 60) return `vor ${m} Min.`;
+  const h = Math.floor(m / 60); return `vor ${h} Std. ${m % 60} Min.`;
+}
+
+/* Geburtsdatum TT.MM.JJJJ */
+function parseBirth(s){
+  const m = /^(\d{2})\.(\d{2})\.(\d{4})$/.exec(String(s).trim());
+  if (!m) return null;
+  const d = +m[1], mo = +m[2], y = +m[3];
+  const dt = new Date(y, mo - 1, d);
+  if (dt.getFullYear() !== y || dt.getMonth() !== mo - 1 || dt.getDate() !== d) return null;
+  return dt;
+}
+function ageOn(birth, ref){
+  let a = ref.getFullYear() - birth.getFullYear();
+  const md = (ref.getMonth() - birth.getMonth()) || (ref.getDate() - birth.getDate());
+  if (md < 0) a--;
+  return a;
+}
+const inPeriod = e => { const t = new Date(e.ts); return t >= CONFIG.periodStart && t <= CONFIG.periodEnd; };
+
+/* =========================================================
+   Datenspeicher: localStorage + Sicherungskopie in IndexedDB
+   ========================================================= */
+const Store = {
+  entries: [],
+  db: null,
+  async openDb(){
+    if (!("indexedDB" in window)) return null;
+    return new Promise(res => {
+      try {
+        const r = indexedDB.open("mppm-gewinnspiel", 1);
+        r.onupgradeneeded = () => r.result.createObjectStore("kv");
+        r.onsuccess = () => res(r.result);
+        r.onerror = () => res(null);
+      } catch(e){ res(null); }
+    });
+  },
+  idbGet(key){
+    return new Promise(res => {
+      if (!this.db) return res(null);
+      try { const q = this.db.transaction("kv").objectStore("kv").get(key); q.onsuccess = () => res(q.result || null); q.onerror = () => res(null); }
+      catch(e){ res(null); }
+    });
+  },
+  idbSet(key, val){
+    return new Promise(res => {
+      if (!this.db) return res(false);
+      try { const tx = this.db.transaction("kv", "readwrite"); tx.objectStore("kv").put(val, key); tx.oncomplete = () => res(true); tx.onerror = () => res(false); }
+      catch(e){ res(false); }
+    });
+  },
+  lsGet(key){ try { return JSON.parse(localStorage.getItem(key) || "null"); } catch(e){ return null; } },
+  lsSet(key, val){ try { localStorage.setItem(key, JSON.stringify(val)); return true; } catch(e){ return false; } },
+
+  async init(){
+    this.db = await this.openDb();
+    const a = this.lsGet(CONFIG.storageKey) || [];
+    const b = (await this.idbGet(CONFIG.storageKey)) || [];
+    const map = new Map();
+    [...a, ...b].forEach(e => { if (e && e.id) map.set(e.id, e); });
+    this.entries = [...map.values()].sort((x, y) => x.ts.localeCompare(y.ts));
+    if (this.entries.length) await this.persist();
+    try { if (navigator.storage && navigator.storage.persist) await navigator.storage.persist(); } catch(e){}
+  },
+  async persist(){
+    const okLs = this.lsSet(CONFIG.storageKey, this.entries);
+    const okDb = await this.idbSet(CONFIG.storageKey, this.entries);
+    return okLs || okDb;
+  },
+  async add(entry){
+    this.entries.push(entry);
+    const ok = await this.persist();
+    if (!ok){ this.entries.pop(); return false; }
+    const back = this.lsGet(CONFIG.storageKey) || (await this.idbGet(CONFIG.storageKey)) || [];
+    return back.some(e => e.id === entry.id);
+  },
+  async clear(){ this.entries = []; await this.persist(); },
+  meta(key, val){
+    const k = CONFIG.storageKey + "_meta";
+    const m = this.lsGet(k) || {};
+    if (val === undefined) return m[key];
+    m[key] = val; this.lsSet(k, m);
+  },
+
+  /* ---------- stündliche Sicherungen ---------- */
+  async backups(){ return (await this.idbGet(CONFIG.storageKey + "_backups")) || this.lsGet(CONFIG.storageKey + "_backups") || []; },
+  async snapshot(force){
+    const list = await this.backups();
+    const last = list[list.length - 1];
+    if (!force && !this.entries.length) return null;
+    const sig = this.entries.length + "|" + (this.entries.length ? this.entries[this.entries.length - 1].id : "");
+    if (!force && last && last.sig === sig){
+      // nichts Neues – nur Zeitpunkt der Prüfung merken
+      this.meta("lastBackupCheck", new Date().toISOString());
+      return null;
+    }
+    const snap = { ts: new Date().toISOString(), count: this.entries.length, sig, entries: this.entries.slice() };
+    list.push(snap);
+    while (list.length > CONFIG.backupKeep) list.shift();
+    const ok = await this.idbSet(CONFIG.storageKey + "_backups", list);
+    if (!ok) this.lsSet(CONFIG.storageKey + "_backups", list.slice(-12));
+    this.meta("lastBackupCheck", snap.ts);
+    return snap;
+  }
+};
+
+/* =========================================================
+   Formular
+   ========================================================= */
+const form = $("entryForm");
+const fields = ["tip", "first", "last", "email", "phone", "birth"];
+
+function setInvalid(id, bad){
+  const wrap = id === "tip" ? $("tipBox") : (id.startsWith("c-") ? $(id) : $("f-" + id));
+  wrap.classList.toggle("invalid", !!bad);
+}
+
+function validate(){
+  let firstBad = null;
+  const mark = (id, bad, focusEl) => { setInvalid(id, bad); if (bad && !firstBad) firstBad = focusEl || $(id); };
+
+  const tip = parseNumber($("tip").value);
+  const tipBad = tip === null || isNaN(tip) || tip < CONFIG.tipMin || tip > CONFIG.tipMax;
+  $("tipErr").textContent = (tip !== null && !isNaN(tip) && (tip < CONFIG.tipMin || tip > CONFIG.tipMax))
+    ? "Dieser Wert wirkt unrealistisch – bitte prüfen."
+    : "Bitte geben Sie einen gültigen Indexstand ein.";
+  mark("tip", tipBad);
+
+  const first = $("first").value.trim(), last = $("last").value.trim();
+  mark("first", first.length < 1);
+  mark("last", last.length < 1);
+
+  const email = $("email").value.trim().toLowerCase();
+  let emailBad = !emailOk(email);
+  $("emailErr").textContent = "Bitte eine gültige E-Mail-Adresse angeben.";
+  if (!emailBad && Store.entries.some(e => e.email === email)){
+    emailBad = true;
+    $("emailErr").textContent = "Mit dieser E-Mail-Adresse wurde bereits teilgenommen.";
+  }
+  mark("email", emailBad);
+
+  const phone = $("phone").value.trim();
+  mark("phone", CONFIG.phoneRequired ? !phoneOk(phone) : (phone !== "" && !phoneOk(phone)));
+
+  const birthStr = $("birth").value.trim();
+  const birth = parseBirth(birthStr);
+  let birthBad = false;
+  $("birthErr").textContent = "Bitte ein gültiges Geburtsdatum angeben (TT.MM.JJJJ).";
+  if (!birth || birth.getFullYear() < 1900 || birth > new Date()) birthBad = true;
+  else if (ageOn(birth, new Date()) < CONFIG.minAge){
+    birthBad = true;
+    $("birthErr").textContent = "Die Teilnahme ist erst ab 18 Jahren möglich.";
+  } else if (first && last && Store.entries.some(e =>
+      e.birth === birthStr && e.first.toLowerCase() === first.toLowerCase() && e.last.toLowerCase() === last.toLowerCase())){
+    birthBad = true;
+    $("birthErr").textContent = "Sie haben bereits teilgenommen.";
+  }
+  mark("birth", birthBad);
+
+  mark("c-data", !$("consentData").checked, $("consentData"));
+
+  return { ok: !firstBad, firstBad, tip, email, phone, birthStr };
+}
+
+function resetForm(){
+  form.reset();
+  fields.forEach(id => $(id).value = "");
+  ["tip","first","last","email","phone","birth","c-data"].forEach(id => setInvalid(id, false));
+  document.activeElement && document.activeElement.blur && document.activeElement.blur();
+  document.querySelector(".form").scrollTop = 0;
+  window.scrollTo(0, 0);
+}
+
+form.addEventListener("submit", async ev => {
+  ev.preventDefault();
+  const v = validate();
+  if (!v.ok){
+    toast("Bitte die markierten Angaben prüfen.");
+    if (v.firstBad && v.firstBad.type !== "checkbox") v.firstBad.focus();
+    else if (v.firstBad) v.firstBad.closest(".check").scrollIntoView({block: "center", behavior: "smooth"});
+    return;
+  }
+  const now = new Date();
+  const entry = {
+    id: now.getTime().toString(36) + "-" + Math.random().toString(36).slice(2, 8),
+    ts: now.toISOString(),
+    tsLocal: localStamp(now),
+    tip: v.tip,
+    first: $("first").value.trim(),
+    last: $("last").value.trim(),
+    email: v.email,
+    birth: v.birthStr,
+    phone: v.phone,
+    consentData: true,
+    consentContact: $("consentContact").checked,
+    textVersion: CONFIG.textVersion
+  };
+  const saved = await Store.add(entry);
+  if (!saved){
+    toast("Speichern fehlgeschlagen – bitte das Personal am Stand ansprechen.", 6000);
+    return;
+  }
+  updateDue();
+  showThanks(entry);
+});
+
+$("tip").addEventListener("blur", () => {
+  const n = parseNumber($("tip").value);
+  if (n !== null && !isNaN(n)) $("tip").value = nf.format(n);
+});
+// Geburtsdatum: Punkte automatisch setzen
+$("birth").addEventListener("input", e => {
+  const el = e.target;
+  if (e.inputType && e.inputType.startsWith("delete")) return;
+  const d = el.value.replace(/\D/g, "").slice(0, 8);
+  let out = d.slice(0, 2);
+  if (d.length >= 2) out += "." + d.slice(2, 4);
+  if (d.length >= 4) out += "." + d.slice(4, 8);
+  el.value = out;
+});
+fields.forEach(id => $(id).addEventListener("input", () => setInvalid(id, false)));
+$("consentData").addEventListener("change", () => setInvalid("c-data", false));
+
+/* ---------- Danke-Bildschirm ---------- */
+let thanksTimer = null;
+function showThanks(entry){
+  $("toast").classList.remove("show");
+  $("thanksTitle").textContent = `Vielen Dank, ${entry.first}!`;
+  $("thanksTip").textContent = nf.format(entry.tip) + " Punkte";
+  $("thanks").classList.add("open");
+  resetForm();
+  let left = CONFIG.thanksSeconds;
+  const tick = () => {
+    $("thanksAgain").textContent = `Antippen für die nächste Teilnahme · automatisch in ${left} s`;
+    if (left-- <= 0) closeThanks();
+  };
+  clearInterval(thanksTimer); tick(); thanksTimer = setInterval(tick, 1000);
+}
+function closeThanks(){ clearInterval(thanksTimer); $("thanks").classList.remove("open"); }
+$("thanks").addEventListener("click", closeThanks);
+
+/* ---------- Leerlauf: Formular nach Inaktivität leeren ---------- */
+let lastActivity = Date.now();
+["touchstart","keydown","input","mousedown"].forEach(t => document.addEventListener(t, () => lastActivity = Date.now(), {passive: true}));
+setInterval(() => {
+  if (document.querySelector(".overlay.open")) return;
+  const dirty = fields.some(id => $(id).value.trim() !== "") || $("consentData").checked || $("consentContact").checked;
+  if (dirty && Date.now() - lastActivity > CONFIG.idleResetSeconds * 1000) resetForm();
+}, 5000);
+
+/* =========================================================
+   Überlagerungen
+   ========================================================= */
+function openOverlay(id){ $(id).classList.add("open"); }
+function closeOverlay(id){ $(id).classList.remove("open"); }
+document.querySelectorAll("[data-close]").forEach(b => b.addEventListener("click", () => closeOverlay(b.closest(".overlay").id)));
+document.querySelectorAll(".modal").forEach(m => m.addEventListener("click", e => { if (e.target === m) closeOverlay(m.id); }));
+$("openTerms").addEventListener("click", () => { $("termsBody").scrollTop = 0; openOverlay("terms"); });
+$("termsInline").addEventListener("click", e => { e.preventDefault(); e.stopPropagation(); $("termsBody").scrollTop = 0; openOverlay("terms"); });
+
+/* ---------- Verwaltung: einmal auf das Logo tippen ---------- */
+$("brand").addEventListener("click", () => {
+  $("pinInput").value = ""; $("pinErr").style.display = "none";
+  openOverlay("pinModal"); setTimeout(() => $("pinInput").focus(), 50);
+});
+$("pinInput").addEventListener("input", () => {
+  const v = $("pinInput").value;
+  if (v === CONFIG.adminPin){ closeOverlay("pinModal"); $("pinInput").blur(); renderAdmin(); openOverlay("admin"); }
+  else if (v.length >= CONFIG.adminPin.length){ $("pinErr").style.display = "block"; setTimeout(() => { $("pinInput").value = ""; }, 400); }
+});
+
+async function renderAdmin(){
+  const E = Store.entries;
+  $("sCount").textContent = E.length;
+  $("sContact").textContent = E.filter(e => e.consentContact).length;
+  const lastAuto = Store.meta("lastBackupCheck");
+  $("sAuto").textContent = lastAuto ? `${localStamp(new Date(lastAuto)).slice(0, 16)} Uhr (${ago(lastAuto)})` : "noch keine";
+  const lastExp = Store.meta("lastExportIso");
+  $("sExport").textContent = lastExp ? `${localStamp(new Date(lastExp)).slice(0, 16)} Uhr (${ago(lastExp)})` : "noch nie";
+  $("sExportBox").classList.toggle("alert", exportDue());
+  $("persistInfo").textContent = "";
+  $("winnerOut").innerHTML = "";
+  const head = `<tr><th>Nr.</th><th>Zeitpunkt</th><th class="num">Schätzung</th><th>Name</th><th>E-Mail</th><th>Geburtsdatum</th><th>Telefon</th><th>E-Mail-Infos</th></tr>`;
+  const rows = E.slice().reverse().map((e, i) => `<tr><td>${E.length - i}</td><td>${esc(e.tsLocal)}</td><td class="num">${nf.format(e.tip)}</td><td>${esc(e.first)} ${esc(e.last)}</td><td>${esc(e.email)}</td><td>${esc(e.birth || "–")}</td><td>${esc(e.phone || "–")}</td><td>${e.consentContact ? "Ja" : "Nein"}</td></tr>`).join("");
+  $("entryTable").innerHTML = head + (rows || `<tr><td colspan="8" class="muted">Noch keine Teilnahmen.</td></tr>`);
+  await renderBackups();
+}
+
+async function renderBackups(){
+  const list = (await Store.backups()).slice().reverse();
+  const head = `<tr><th>Sicherung vom</th><th class="num">Einträge</th><th></th></tr>`;
+  const rows = list.map((b, i) => `<tr><td>${esc(localStamp(new Date(b.ts)))}</td><td class="num">${b.count}</td><td style="text-align:right"><button class="btn sm" data-backup="${list.length - 1 - i}">Als Excel speichern</button></td></tr>`).join("");
+  $("backupTable").innerHTML = head + (rows || `<tr><td colspan="3" class="muted">Noch keine Sicherung vorhanden.</td></tr>`);
+  $("backupTable").querySelectorAll("[data-backup]").forEach(btn => btn.addEventListener("click", async () => {
+    const all = await Store.backups();
+    const b = all[+btn.dataset.backup];
+    if (b) await exportExcel(b.entries, "Sicherung", new Date(b.ts));
+  }));
+}
+
+/* ---------- Excel-Export ---------- */
+async function exportExcel(E, kind, stampDate){
+  if (typeof XLSX === "undefined"){ toast("Excel-Bibliothek nicht geladen."); return; }
+  if (!E.length){ toast("Keine Einträge zum Exportieren."); return; }
+  const rows = E.map((e, i) => ({
+    "Nr.": i + 1,
+    "Zeitpunkt": e.tsLocal,
+    "Schätzung DAX-Schlussstand (Punkte)": e.tip,
+    "Vorname": e.first,
+    "Nachname": e.last,
+    "E-Mail": e.email,
+    "Geburtsdatum": e.birth || "",
+    "Telefon": e.phone || "",
+    "Teilnahmebedingungen akzeptiert": e.consentData ? "Ja" : "Nein",
+    "Einwilligung E-Mail-Informationen": e.consentContact ? "Ja" : "Nein",
+    "Im Teilnahmezeitraum": inPeriod(e) ? "Ja" : "Nein",
+    "Version Einwilligungstexte": e.textVersion,
+    "Zeitstempel (UTC)": e.ts,
+    "Eintrags-ID": e.id
+  }));
+  const ws = XLSX.utils.json_to_sheet(rows);
+  ws["!cols"] = [6, 20, 28, 16, 18, 30, 14, 18, 18, 20, 14, 16, 26, 18].map(w => ({wch: w}));
+  for (let r = 2; r <= rows.length + 1; r++){ const c = ws["C" + r]; if (c) c.z = "#,##0.00"; }
+  ws["!autofilter"] = { ref: `A1:N${rows.length + 1}` };
+
+  const ws2 = XLSX.utils.json_to_sheet([
+    { "Version": CONFIG.textVersion, "Checkbox": "Pflichtfeld", "Wortlaut": TEXTS.consentData },
+    { "Version": CONFIG.textVersion, "Checkbox": "Freiwillig (nicht vorangekreuzt)", "Wortlaut": TEXTS.consentContact }
+  ]);
+  ws2["!cols"] = [{wch: 14}, {wch: 30}, {wch: 120}];
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Teilnahmen");
+  XLSX.utils.book_append_sheet(wb, ws2, "Einwilligungstexte");
+  const out = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+
+  const d = stampDate || new Date();
+  const name = `MPPM_Gewinnspiel_${kind}_${fileStamp(d)}.xlsx`;
+  const mime = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+  const blob = new Blob([out], { type: mime });
+
+  let done = false;
+  try {
+    const file = new File([blob], name, { type: mime });
+    if (navigator.canShare && navigator.canShare({ files: [file] })){
+      await navigator.share({ files: [file], title: name });
+      done = true;
+    }
+  } catch(e){
+    if (e && e.name === "AbortError") return;
+  }
+  if (!done){
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob); a.download = name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 10000);
+  }
+  Store.meta("lastExportIso", new Date().toISOString());
+  updateDue();
+  renderAdmin();
+  toast("Excel-Datei erstellt.");
+}
+$("btnExport").addEventListener("click", () => exportExcel(Store.entries, "Export"));
+$("btnBackupNow").addEventListener("click", async () => { await Store.snapshot(true); await renderAdmin(); toast("Sicherung angelegt."); });
+
+$("btnPersist").addEventListener("click", async () => {
+  let msg = `${Store.entries.length} Einträge gespeichert. `;
+  try {
+    if (navigator.storage && navigator.storage.persisted){
+      const p = await navigator.storage.persisted();
+      msg += p ? "Speicher ist als dauerhaft markiert." : "Der Browser hat den Speicher nicht als dauerhaft markiert – bitte regelmäßig als Excel sichern.";
+    }
+  } catch(e){}
+  msg += Store.db ? " Zweitkopie in IndexedDB aktiv." : " Keine Zweitkopie möglich.";
+  msg += navigator.serviceWorker && navigator.serviceWorker.controller ? " Offline-Modus aktiv." : " Offline-Modus noch nicht aktiv (App einmal neu öffnen).";
+  $("persistInfo").textContent = msg;
+});
+
+$("btnClear").addEventListener("click", async () => {
+  if (!Store.entries.length){ toast("Keine Einträge vorhanden."); return; }
+  if (!Store.meta("lastExportIso") && !confirm("Es wurde noch nie als Excel exportiert. Trotzdem fortfahren?")) return;
+  const answer = prompt(`Achtung: Alle ${Store.entries.length} Einträge werden gelöscht.\nDie Sicherungen bleiben erhalten.\nZur Bestätigung bitte LÖSCHEN eingeben:`);
+  if ((answer || "").trim().toUpperCase() !== "LÖSCHEN"){ toast("Nicht gelöscht."); return; }
+  await Store.snapshot(true);   // letzte Sicherung vor dem Löschen
+  await Store.clear(); renderAdmin(); updateDue(); toast("Alle Einträge gelöscht.");
+});
+
+$("btnWinner").addEventListener("click", () => {
+  const close = parseNumber($("officialClose").value);
+  if (close === null || isNaN(close)){ toast("Bitte den Schlussstand eingeben."); return; }
+  $("officialClose").value = nf.format(close);
+  const all = Store.entries;
+  const pool = $("includeOutside").checked ? all : all.filter(inPeriod);
+  const excluded = all.length - pool.length;
+  const ranked = pool
+    .map(e => ({ ...e, diff: Math.round(Math.abs(e.tip - close) * 100) / 100 }))
+    .sort((a, b) => a.diff - b.diff || a.ts.localeCompare(b.ts));
+  if (!ranked.length){
+    $("winnerOut").innerHTML = `<p class="muted">Keine Einträge im Teilnahmezeitraum${excluded ? ` (${excluded} außerhalb nicht berücksichtigt)` : ""}.</p>`;
+    return;
+  }
+  const best = ranked[0].diff;
+  const tied = ranked.filter(e => e.diff === best).length;
+  const top = ranked.slice(0, Math.max(10, tied));
+  let place = 0, prev = null;
+  const rows = top.map((e, i) => {
+    if (e.diff !== prev){ place = i + 1; prev = e.diff; }
+    const isTie = e.diff === best && tied > 1;
+    return `<tr class="${isTie ? "tie" : ""}"${i === 0 && tied === 1 ? ' style="background:var(--blue-tint);font-weight:600"' : ""}><td>${place}</td><td>${esc(e.first)} ${esc(e.last)}</td><td class="num">${nf.format(e.tip)}</td><td class="num">${nf.format(e.diff)}</td><td>${esc(e.tsLocal)}</td><td>${esc(e.email)}</td></tr>`;
+  }).join("");
+  $("winnerOut").innerHTML = `<div class="tablewrap" style="margin-bottom:6px"><table>
+    <tr><th>Platz</th><th>Name</th><th class="num">Schätzung</th><th class="num">Abweichung</th><th>Abgegeben</th><th>E-Mail</th></tr>${rows}
+  </table></div>
+  <p class="muted">${tied > 1 ? `<b style="color:#b45309">Gleichstand: ${tied} Teilnehmer mit derselben geringsten Abweichung – der Gewinner wird laut § 6 Abs. 3 per Los ermittelt.</b> ` : ""}${excluded ? `${excluded} Einträge außerhalb des Teilnahmezeitraums wurden nicht berücksichtigt.` : ""}</p>`;
+});
+
+/* =========================================================
+   Automatische Sicherung und Erinnerung
+   ========================================================= */
+function exportDue(){
+  if (!Store.entries.length) return false;
+  const last = Store.meta("lastExportIso");
+  const lastEntry = Store.entries[Store.entries.length - 1].ts;
+  if (last && last >= lastEntry) return false;   // seit dem letzten Export nichts Neues
+  return !last || (Date.now() - new Date(last).getTime()) > CONFIG.exportReminderMinutes * 60000;
+}
+function updateDue(){ $("brand").classList.toggle("due", exportDue()); }
+
+async function backupTick(){
+  const last = Store.meta("lastBackupCheck");
+  if (!last || Date.now() - new Date(last).getTime() >= CONFIG.backupEveryMinutes * 60000){
+    await Store.snapshot(false);
+  }
+  updateDue();
+}
+
+/* =========================================================
+   Start
+   ========================================================= */
+$("notice").innerHTML = NOTICE_HTML;
+$("consentContactText").textContent = TEXTS.consentContact;
+$("termsBody").innerHTML = TERMS_HTML;
+if (CONFIG.phoneRequired) $("phoneOpt").hidden = true;
+
+Store.init().then(() => { backupTick(); setInterval(backupTick, 60000); }).catch(() => {});
+
+if ("serviceWorker" in navigator && location.protocol !== "file:"){
+  navigator.serviceWorker.register("sw.js").catch(() => {});
+}
+document.addEventListener("contextmenu", e => { if (e.target.tagName !== "INPUT") e.preventDefault(); });
+document.addEventListener("gesturestart", e => e.preventDefault());
+</script>
+</body>
+</html>
